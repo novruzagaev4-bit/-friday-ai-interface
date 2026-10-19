@@ -3,437 +3,122 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#050b12">
 <title>F.R.I.D.A.Y. — Stark Industries</title>
-
 <style>
 :root {
-  --bg: #050b12;
-  --panel: rgba(8, 22, 34, .88);
-  --cyan: #00eaff;
-  --blue: #008cff;
-  --text: #d9faff;
-  --muted: #7197a6;
-  --border: rgba(0, 234, 255, .23);
-  --green: #42ffb0;
-  --red: #ff637c;
+  --bg:#050b12;
+  --panel:rgba(8,22,34,.92);
+  --cyan:#00eaff;
+  --blue:#008cff;
+  --text:#d9faff;
+  --muted:#7197a6;
+  --border:rgba(0,234,255,.24);
+  --red:#ff637c;
+  --green:#42ffb0;
 }
-
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background:
-    radial-gradient(ellipse at 50% 35%, #0b2639 0%, transparent 48%),
-    linear-gradient(135deg, #03070d, #071421 60%, #02060b);
-  color: var(--text);
-  font-family: "Segoe UI", Arial, sans-serif;
-  overflow-x: hidden;
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;background:
+  radial-gradient(ellipse at 50% 35%,#0b2639,transparent 48%),
+  linear-gradient(135deg,#03070d,#071421 60%,#02060b);
+  color:var(--text);font-family:Segoe UI,Arial,sans-serif;
 }
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: .17;
-  background-image:
-    linear-gradient(rgba(0,234,255,.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,234,255,.12) 1px, transparent 1px);
-  background-size: 35px 35px;
-  mask-image: linear-gradient(to bottom, black, transparent 90%);
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.15;
+  background-image:linear-gradient(rgba(0,234,255,.15) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(0,234,255,.15) 1px,transparent 1px);
+  background-size:35px 35px;
 }
-
-button, input { font: inherit; }
-
-button { cursor: pointer; }
-
-header {
-  position: relative;
-  z-index: 1;
-  min-height: 78px;
-  padding: 18px 4%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  border-bottom: 1px solid var(--border);
-  background: rgba(2, 9, 16, .8);
+button,input{font:inherit}
+button{cursor:pointer}
+header{
+  position:relative;display:flex;justify-content:space-between;
+  align-items:center;gap:12px;padding:18px 4%;
+  border-bottom:1px solid var(--border);background:#020910d9;
 }
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 13px;
+.brand{display:flex;align-items:center;gap:12px}
+.brand-icon{
+  width:42px;height:42px;border:1px solid var(--cyan);
+  color:var(--cyan);border-radius:50%;display:grid;place-items:center;
+  font-size:24px;box-shadow:0 0 20px #00eaff30;
 }
-
-.brand-icon {
-  width: 42px;
-  height: 42px;
-  border: 1px solid var(--cyan);
-  color: var(--cyan);
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgba(0,234,255,.18);
-  font-size: 23px;
+.brand h1{margin:0;font-size:20px;letter-spacing:4px}
+.brand small{display:block;margin-top:4px;font-size:9px;letter-spacing:2px;color:var(--muted)}
+.header-right{text-align:right;font-size:10px;color:var(--muted)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:6px}
+.dot.offline{background:var(--red)}
+main{
+  position:relative;display:grid;grid-template-columns:.8fr 1fr 1.35fr;
+  gap:18px;width:min(1500px,100%);margin:auto;padding:25px 4%;
 }
-
-.brand h1 {
-  margin: 0;
-  font-size: 20px;
-  letter-spacing: 4px;
+.panel{min-width:0;border:1px solid var(--border);background:var(--panel);border-radius:5px}
+.panel-title{padding:15px;border-bottom:1px solid var(--border);font-size:10px;letter-spacing:2px;color:var(--cyan)}
+.left-content{padding:14px}
+.module{padding:13px;margin-bottom:12px;border:1px solid #00eaff25;background:#00eaff05}
+.module-name{font-size:12px;letter-spacing:1px}
+.module-description{font-size:10px;color:var(--muted);margin-top:7px;line-height:1.6}
+.module-status{font-size:9px;color:var(--green);margin-top:10px}
+.center{min-height:400px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px 10px}
+.core{
+  width:min(210px,60vw);aspect-ratio:1;border:1px solid #00eaffaa;border-radius:50%;
+  display:grid;place-items:center;position:relative;
+  box-shadow:0 0 28px #00eaff25,inset 0 0 35px #008cff22;
+  animation:pulse 4s ease-in-out infinite;
 }
-
-.brand small {
-  display: block;
-  margin-top: 4px;
-  font-size: 9px;
-  letter-spacing: 2px;
-  color: var(--muted);
+.core:before,.core:after{
+  content:"";position:absolute;inset:13px;border:1px dashed #00eaff80;border-radius:50%;
+  animation:spin 18s linear infinite;
 }
-
-.header-right {
-  text-align: right;
-  font-size: 10px;
-  letter-spacing: 1px;
-  color: var(--muted);
-}
-
-.status-dot {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin-right: 6px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 10px var(--green);
-}
-
-.status-dot.offline {
-  background: var(--red);
-  box-shadow: 0 0 10px var(--red);
-}
-
-main {
-  position: relative;
-  z-index: 1;
-  width: min(1500px, 100%);
-  margin: auto;
-  padding: 25px 4%;
-  display: grid;
-  grid-template-columns: minmax(180px, .8fr) minmax(220px, 1fr) minmax(300px, 1.35fr);
-  gap: 20px;
-}
-
-.panel {
-  border: 1px solid var(--border);
-  background: var(--panel);
-  border-radius: 5px;
-  box-shadow: 0 0 25px rgba(0, 140, 255, .045);
-  min-width: 0;
-}
-
-.panel-title {
-  padding: 16px;
-  border-bottom: 1px solid var(--border);
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: var(--cyan);
-}
-
-.left-content { padding: 15px; }
-
-.module {
-  border: 1px solid rgba(0,234,255,.16);
-  padding: 13px;
-  margin-bottom: 12px;
-  background: rgba(0,234,255,.025);
-}
-
-.module-name {
-  font-size: 12px;
-  letter-spacing: 1px;
-}
-
-.module-description {
-  color: var(--muted);
-  font-size: 10px;
-  margin-top: 7px;
-  line-height: 1.6;
-}
-
-.module-status {
-  margin-top: 10px;
-  font-size: 9px;
-  color: var(--green);
-  letter-spacing: 1px;
-}
-
-.module-status.demo { color: #ffc66d; }
-
-.center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 10px;
-  min-height: 400px;
-  text-align: center;
-}
-
-.core {
-  width: min(210px, 65vw);
-  aspect-ratio: 1;
-  border: 1px solid rgba(0,234,255,.7);
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  position: relative;
-  box-shadow:
-    0 0 25px rgba(0,234,255,.15),
-    inset 0 0 35px rgba(0,140,255,.13);
-  animation: pulse 4s ease-in-out infinite;
-}
-
-.core::before, .core::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  border: 1px dashed rgba(0,234,255,.5);
-  inset: 13px;
-  animation: spin 18s linear infinite;
-}
-
-.core::after {
-  inset: -12px;
-  border-style: solid;
-  border-color: rgba(0,140,255,.3);
-  border-left-color: transparent;
-  border-right-color: transparent;
-  animation-direction: reverse;
-  animation-duration: 12s;
-}
-
-.core-inner {
-  width: 58%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(circle, #8cffff 0%, #00bfff 20%, #064e86 55%, transparent 72%);
-  filter: drop-shadow(0 0 16px var(--cyan));
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes pulse {
-  0%,100% { transform: scale(1); }
-  50% { transform: scale(1.035); }
-}
-
-.core-label {
-  margin-top: 32px;
-  letter-spacing: 4px;
-  font-size: 16px;
-}
-
-.core-subtitle {
-  margin-top: 10px;
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: var(--muted);
-}
-
-.equalizer {
-  display: flex;
-  gap: 4px;
-  height: 22px;
-  align-items: center;
-  margin-top: 22px;
-}
-
-.equalizer span {
-  width: 3px;
-  height: 6px;
-  background: var(--cyan);
-  animation: wave .8s ease-in-out infinite alternate;
-}
-
-.equalizer span:nth-child(2n) { animation-delay: .2s; }
-.equalizer span:nth-child(3n) { animation-delay: .4s; }
-
-@keyframes wave {
-  to { height: 21px; }
-}
-
-.chat-panel {
-  display: flex;
-  flex-direction: column;
-  min-height: 540px;
-  height: min(700px, calc(100vh - 135px));
-}
-
-.chat-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-}
-
-.clear-button {
-  color: var(--muted);
-  background: transparent;
-  border: 1px solid var(--border);
-  padding: 7px 9px;
-  font-size: 10px;
-}
-
-.clear-button:hover { color: var(--cyan); }
-
-.messages {
-  flex: 1;
-  min-height: 200px;
-  overflow-y: auto;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-  scroll-behavior: smooth;
-}
-
-.message {
-  max-width: 94%;
-  border: 1px solid var(--border);
-  background: rgba(0,234,255,.035);
-  padding: 12px;
-  border-radius: 4px;
-  align-self: flex-start;
-  overflow-wrap: anywhere;
-}
-
-.message.user {
-  align-self: flex-end;
-  border-color: rgba(0,140,255,.5);
-  background: rgba(0,140,255,.1);
-}
-
-.message.error { border-color: rgba(255,99,124,.6); }
-
-.message-label {
-  font-size: 9px;
-  color: var(--cyan);
-  letter-spacing: 1px;
-  margin-bottom: 7px;
-}
-
-.message.user .message-label { color: #6ab9ff; }
-.message.error .message-label { color: var(--red); }
-
-.message-text {
-  font-size: 13px;
-  line-height: 1.65;
-  white-space: pre-wrap;
-}
-
-.chat-form {
-  border-top: 1px solid var(--border);
-  padding: 12px;
-}
-
-.input-row {
-  display: flex;
-  gap: 7px;
-}
-
-#messageInput {
-  min-width: 0;
-  flex: 1;
-  background: rgba(0,0,0,.3);
-  color: var(--text);
-  border: 1px solid var(--border);
-  padding: 12px;
-  outline: none;
-  border-radius: 3px;
-}
-
-#messageInput:focus { border-color: var(--cyan); }
-
-.action-button {
-  background: rgba(0,234,255,.08);
-  border: 1px solid var(--cyan);
-  color: var(--cyan);
-  min-width: 43px;
-  padding: 9px;
-  border-radius: 3px;
-}
-
-.action-button:hover {
-  background: rgba(0,234,255,.18);
-}
-
-.action-button:disabled {
-  opacity: .4;
-  cursor: not-allowed;
-}
-
-.bottom-note {
-  margin-top: 10px;
-  color: var(--muted);
-  font-size: 9px;
-  line-height: 1.6;
-}
-
-footer {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  padding: 15px;
-  border-top: 1px solid var(--border);
-  color: #557685;
-  font-size: 9px;
-  letter-spacing: 1px;
-}
-
-@media (max-width: 950px) {
-  main {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
-  }
-  .left-panel { display: none; }
-  .center { min-height: 360px; }
-}
-
-@media (max-width: 620px) {
-  header { padding: 14px 4%; }
-  .brand h1 { font-size: 17px; letter-spacing: 3px; }
-  .brand small { font-size: 8px; letter-spacing: 1px; }
-  .header-right { font-size: 9px; }
-  main {
-    display: flex;
-    flex-direction: column;
-    padding: 15px 4%;
-    gap: 15px;
-  }
-  .center { min-height: 310px; }
-  .core { width: 145px; }
-  .core-label { margin-top: 24px; }
-  .chat-panel { height: 520px; min-height: 450px; }
-  .message-text { font-size: 13px; }
+.core:after{inset:-12px;border-style:solid;border-color:#008cff55;border-left-color:transparent;border-right-color:transparent;animation-duration:12s;animation-direction:reverse}
+.core-inner{width:58%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#caffff,#00bfff 25%,#064e86 58%,transparent 72%);filter:drop-shadow(0 0 16px var(--cyan))}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{50%{transform:scale(1.035)}}
+.core-label{margin-top:30px;font-size:16px;letter-spacing:4px}
+.core-subtitle{margin-top:10px;font-size:10px;letter-spacing:2px;color:var(--muted)}
+.equalizer{display:flex;gap:4px;height:22px;align-items:center;margin-top:22px}
+.equalizer span{width:3px;height:6px;background:var(--cyan);animation:wave .8s ease-in-out infinite alternate}
+.equalizer span:nth-child(2n){animation-delay:.2s}
+.equalizer span:nth-child(3n){animation-delay:.4s}
+@keyframes wave{to{height:21px}}
+.chat-panel{display:flex;flex-direction:column;height:min(700px,calc(100vh - 135px));min-height:500px}
+.chat-heading{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.clear-button{background:transparent;border:1px solid var(--border);color:var(--muted);padding:7px;font-size:10px}
+.messages{flex:1;min-height:200px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:13px}
+.message{max-width:95%;align-self:flex-start;border:1px solid var(--border);background:#00eaff08;padding:12px;border-radius:4px;overflow-wrap:anywhere}
+.message.user{align-self:flex-end;border-color:#008cff80;background:#008cff18}
+.message.error{border-color:#ff637c99}
+.message-label{font-size:9px;letter-spacing:1px;color:var(--cyan);margin-bottom:7px}
+.message.user .message-label{color:#6ab9ff}
+.message.error .message-label{color:var(--red)}
+.message-text{font-size:13px;line-height:1.65;white-space:pre-wrap}
+.chat-form{border-top:1px solid var(--border);padding:12px}
+.input-row{display:flex;gap:7px}
+#messageInput{min-width:0;flex:1;background:#0005;color:var(--text);border:1px solid var(--border);padding:12px;outline:none;border-radius:3px}
+#messageInput:focus{border-color:var(--cyan)}
+.action-button{min-width:43px;padding:9px;background:#00eaff10;border:1px solid var(--cyan);color:var(--cyan);border-radius:3px}
+.action-button:disabled{opacity:.4;cursor:not-allowed}
+.bottom-note{margin-top:10px;color:var(--muted);font-size:9px;line-height:1.6}
+footer{position:relative;text-align:center;padding:15px;border-top:1px solid var(--border);color:#557685;font-size:9px;letter-spacing:1px}
+@media(max-width:950px){main{grid-template-columns:1fr 1.3fr}.left-panel{display:none}.center{min-height:350px}}
+@media(max-width:620px){
+  header{padding:14px 4%}.brand h1{font-size:17px;letter-spacing:3px}
+  .brand small{font-size:8px;letter-spacing:1px}
+  main{display:flex;flex-direction:column;padding:14px 4%;gap:14px}
+  .center{min-height:290px}.core{width:145px}
+  .core-label{margin-top:24px}.chat-panel{height:520px;min-height:450px}
 }
 </style>
 </head>
-
 <body>
 <header>
   <div class="brand">
     <div class="brand-icon">F</div>
-    <div>
-      <h1>F.R.I.D.A.Y.</h1>
-      <small>STARK INDUSTRIES · PERSONAL AI</small>
-    </div>
+    <div><h1>F.R.I.D.A.Y.</h1><small>STARK INDUSTRIES · PERSONAL AI</small></div>
   </div>
-
   <div class="header-right">
-    <div><span class="status-dot" id="statusDot"></span><span id="connectionStatus">ПРОВЕРКА СЕРВЕРА</span></div>
+    <div><span class="dot offline" id="statusDot"></span><span id="connectionStatus">ПРОВЕРКА...</span></div>
     <div style="margin-top:7px">INTERFACE v2.0</div>
   </div>
 </header>
@@ -447,22 +132,19 @@ footer {
         <div class="module-description">Главный интерфейс ИИ-помощника</div>
         <div class="module-status">● ONLINE</div>
       </div>
-
       <div class="module">
         <div class="module-name">QADAM AI</div>
         <div class="module-description">Бизнес-проект и экосистема</div>
         <div class="module-status">● CONNECTED</div>
       </div>
-
       <div class="module">
         <div class="module-name">NEURAL NETWORK</div>
-        <div class="module-description">Ответы генерируются серверной моделью</div>
-        <div class="module-status demo" id="modelStatus">● ПРОВЕРКА</div>
+        <div class="module-description">Ответы через Python API</div>
+        <div class="module-status" id="modelStatus">● ПРОВЕРКА</div>
       </div>
-
       <div class="module">
         <div class="module-name">VOICE INPUT</div>
-        <div class="module-description">Распознавание речи в браузере</div>
+        <div class="module-description">Распознавание речи браузером</div>
         <div class="module-status" id="voiceStatus">● ПРОВЕРКА</div>
       </div>
     </div>
@@ -475,7 +157,6 @@ footer {
     <div class="equalizer" aria-hidden="true">
       <span></span><span></span><span></span><span></span><span></span>
       <span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span>
     </div>
   </section>
 
@@ -484,141 +165,107 @@ footer {
       <span>НЕЙРОННЫЙ ИНТЕРФЕЙС</span>
       <button type="button" class="clear-button" id="clearButton">ОЧИСТИТЬ</button>
     </div>
-
     <div class="messages" id="messages" aria-live="polite">
       <div class="message">
         <div class="message-label">F.R.I.D.A.Y. · SYSTEM</div>
-        <div class="message-text">Интерфейс запущен. Проверяю соединение с сервером…</div>
+        <div class="message-text">Интерфейс запущен. Проверяю подключение к Python-серверу…</div>
       </div>
     </div>
-
     <form class="chat-form" id="chatForm">
       <div class="input-row">
-        <input
-          id="messageInput"
-          type="text"
-          placeholder="Введите сообщение..."
-          autocomplete="off"
-          maxlength="4000"
-          required
-          aria-label="Сообщение для F.R.I.D.A.Y."
-        >
+        <input id="messageInput" type="text" placeholder="Введите сообщение..." autocomplete="off" maxlength="4000" required aria-label="Сообщение">
         <button class="action-button" type="button" id="voiceButton" title="Голосовой ввод" aria-label="Голосовой ввод">🎙</button>
-        <button class="action-button" type="submit" id="sendButton" aria-label="Отправить сообщение">➤</button>
+        <button class="action-button" type="submit" id="sendButton" aria-label="Отправить">➤</button>
       </div>
-      <div class="bottom-note" id="chatNote">
-        Запросы отправляются на сервер. Для работы ИИ необходим доступный backend и настроенный HF_TOKEN.
-      </div>
+      <div class="bottom-note" id="chatNote">Сообщения отправляются на Python API. Демонстрационные ответы отключены.</div>
     </form>
   </section>
 </main>
 
-<footer>F.R.I.D.A.Y. PERSONAL AI · PROJECT QADAM AI · UNOFFICIAL PERSONAL PROJECT</footer>
+<footer>F.R.I.D.A.Y. PERSONAL AI · PROJECT QADAM AI · PERSONAL PROJECT</footer>
 
 <script>
 "use strict";
 
-/*
- * Адрес работающего backend на Render.
- * Если адрес сервиса изменится, поменяй только эту строку.
- */
+/* Адрес твоего Render backend */
 const API_BASE = "https://friday-ai-backend-gfc4.onrender.com";
 
-const messagesElement = document.getElementById("messages");
-const chatForm = document.getElementById("chatForm");
-const messageInput = document.getElementById("messageInput");
-const sendButton = document.getElementById("sendButton");
-const voiceButton = document.getElementById("voiceButton");
-const clearButton = document.getElementById("clearButton");
-const statusDot = document.getElementById("statusDot");
-const connectionStatus = document.getElementById("connectionStatus");
-const modelStatus = document.getElementById("modelStatus");
-const voiceStatus = document.getElementById("voiceStatus");
-const coreSubtitle = document.getElementById("coreSubtitle");
-const chatNote = document.getElementById("chatNote");
+const $ = (id) => document.getElementById(id);
+const messages = $("messages");
+const form = $("chatForm");
+const input = $("messageInput");
+const sendButton = $("sendButton");
+const voiceButton = $("voiceButton");
+const statusDot = $("statusDot");
+const connectionStatus = $("connectionStatus");
+const modelStatus = $("modelStatus");
+const coreSubtitle = $("coreSubtitle");
+const chatNote = $("chatNote");
 
-let isSending = false;
+let busy = false;
 let recognition = null;
-let isListening = false;
+let listening = false;
 
 function addMessage(label, text, type = "assistant") {
-  const message = document.createElement("div");
-  message.className = "message" +
+  const box = document.createElement("div");
+  box.className = "message" +
     (type === "user" ? " user" : "") +
     (type === "error" ? " error" : "");
 
-  const messageLabel = document.createElement("div");
-  messageLabel.className = "message-label";
-  messageLabel.textContent = label;
+  const heading = document.createElement("div");
+  heading.className = "message-label";
+  heading.textContent = label;
 
-  const messageText = document.createElement("div");
-  messageText.className = "message-text";
-  messageText.textContent = String(text);
+  const content = document.createElement("div");
+  content.className = "message-text";
+  content.textContent = String(text);
 
-  message.append(messageLabel, messageText);
-  messagesElement.appendChild(message);
-  messagesElement.scrollTop = messagesElement.scrollHeight;
-
-  return message;
+  box.append(heading, content);
+  messages.appendChild(box);
+  messages.scrollTop = messages.scrollHeight;
+  return box;
 }
 
-function setConnection(online, label) {
+function setStatus(online, label) {
   statusDot.classList.toggle("offline", !online);
   connectionStatus.textContent = label;
 }
 
-function setSending(sending) {
-  isSending = sending;
-  sendButton.disabled = sending;
-  messageInput.disabled = sending;
-  sendButton.textContent = sending ? "…" : "➤";
-  coreSubtitle.textContent = sending ? "PROCESSING REQUEST..." : "PERSONAL AI SYSTEM";
-}
-
 async function checkServer() {
-  setConnection(false, "ПОДКЛЮЧЕНИЕ...");
-  modelStatus.textContent = "● ПРОВЕРКА СЕРВЕРА";
-  modelStatus.classList.add("demo");
-
   try {
     const response = await fetch(`${API_BASE}/health`, {
-      method: "GET",
-      headers: { "Accept": "application/json" }
+      headers: { Accept: "application/json" }
     });
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
     const data = await response.json();
-
-    setConnection(true, "СЕРВЕР ДОСТУПЕН");
+    setStatus(true, "СЕРВЕР ДОСТУПЕН");
     modelStatus.textContent = "● BACKEND ONLINE";
-    modelStatus.classList.remove("demo");
     chatNote.textContent =
-      "Сервер отвечает. Если модель не настроена, запрос ИИ может вернуть ошибку.";
+      "Сервер доступен. Отправь сообщение для проверки языковой модели.";
     return data;
   } catch (error) {
-    setConnection(false, "СЕРВЕР НЕДОСТУПЕН");
-    modelStatus.textContent = "● ПРОВЕРЬ BACKEND";
-    modelStatus.classList.add("demo");
+    setStatus(false, "СЕРВЕР НЕДОСТУПЕН");
+    modelStatus.textContent = "● ОШИБКА ПОДКЛЮЧЕНИЯ";
     chatNote.textContent =
-      "Не удалось проверить сервер. Проверь адрес Render и доступность /health.";
+      "Не удалось подключиться. Проверь URL сервера и настройки CORS.";
     return null;
   }
 }
 
-async function sendMessage(text) {
-  if (isSending) return;
+async function sendMessage(rawMessage) {
+  const message = rawMessage.trim();
+  if (!message || busy) return;
 
-  const cleanText = text.trim();
-  if (!cleanText) return;
+  addMessage("YOU", message, "user");
+  input.value = "";
+  busy = true;
+  sendButton.disabled = true;
+  input.disabled = true;
+  sendButton.textContent = "…";
+  coreSubtitle.textContent = "PROCESSING REQUEST...";
 
-  addMessage("YOU", cleanText, "user");
-  messageInput.value = "";
-  setSending(true);
-
-  const loadingMessage = addMessage("F.R.I.D.A.Y.", "Обрабатываю запрос…");
+  const loading = addMessage("F.R.I.D.A.Y.", "Запрос отправлен на сервер…");
 
   try {
     const response = await fetch(`${API_BASE}/chat`, {
@@ -627,142 +274,120 @@ async function sendMessage(text) {
         "Content-Type": "application/json",
         "Accept": "application/json"
       },
-      body: JSON.stringify({ message: cleanText })
+      body: JSON.stringify({ message })
     });
 
-    const rawText = await response.text();
-    let data = {};
+    const raw = await response.text();
+    let data;
 
     try {
-      data = rawText ? JSON.parse(rawText) : {};
+      data = raw ? JSON.parse(raw) : {};
     } catch {
-      throw new Error(
-        `Сервер вернул неожиданный ответ (HTTP ${response.status}).`
-      );
+      throw new Error(`Сервер вернул некорректный ответ (HTTP ${response.status}).`);
     }
 
     if (!response.ok) {
       const detail = typeof data.detail === "string"
         ? data.detail
-        : `Ошибка сервера HTTP ${response.status}.`;
-
+        : `Ошибка API: HTTP ${response.status}.`;
       throw new Error(detail);
     }
 
     if (typeof data.reply !== "string" || !data.reply.trim()) {
-      throw new Error("Сервер ответил, но поле reply отсутствует или пустое.");
+      throw new Error("API не вернул текст ответа в поле reply.");
     }
 
-    loadingMessage.remove();
+    loading.remove();
     addMessage("F.R.I.D.A.Y.", data.reply);
-    setConnection(true, "СЕРВЕР ДОСТУПЕН");
+    setStatus(true, "СЕРВЕР ДОСТУПЕН");
+    modelStatus.textContent = "● ОТВЕТ ПОЛУЧЕН";
   } catch (error) {
-    loadingMessage.remove();
+    loading.remove();
 
-    const description = error instanceof TypeError
-      ? "Не удалось соединиться с API. Проверь адрес сервера и настройки CORS."
-      : (error.message || "Неизвестная ошибка.");
+    const reason = error instanceof TypeError
+      ? "Не удалось выполнить запрос. Возможны проблемы с сетью или CORS."
+      : error.message;
 
-    addMessage(
-      "SYSTEM ERROR",
-      `Не удалось получить ответ.\n${description}`,
-      "error"
-    );
-
-    setConnection(false, "ОШИБКА ЗАПРОСА");
+    addMessage("SYSTEM ERROR", reason, "error");
+    setStatus(false, "ОШИБКА ЗАПРОСА");
+    modelStatus.textContent = "● НУЖНА ПРОВЕРКА";
+    chatNote.textContent =
+      "Сервер или языковая модель вернули ошибку. Проверь логи Render.";
   } finally {
-    setSending(false);
-    messageInput.disabled = false;
-    messageInput.focus();
+    busy = false;
+    sendButton.disabled = false;
+    input.disabled = false;
+    sendButton.textContent = "➤";
+    coreSubtitle.textContent = "PERSONAL AI SYSTEM";
+    input.focus();
   }
 }
 
-chatForm.addEventListener("submit", async (event) => {
+form.addEventListener("submit", (event) => {
   event.preventDefault();
-  await sendMessage(messageInput.value);
+  sendMessage(input.value);
 });
 
-clearButton.addEventListener("click", () => {
-  if (isSending) return;
-
-  messagesElement.replaceChildren();
-  addMessage(
-    "F.R.I.D.A.Y. · SYSTEM",
-    "История на экране очищена. Готова к следующему запросу."
-  );
-  messageInput.focus();
+$("clearButton").addEventListener("click", () => {
+  if (busy) return;
+  messages.replaceChildren();
+  addMessage("F.R.I.D.A.Y. · SYSTEM", "Чат очищен. Готова к новому запросу.");
+  input.focus();
 });
 
-/* Голосовой ввод использует распознавание речи браузером. */
-const SpeechRecognitionAPI =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
+const SpeechAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-if (SpeechRecognitionAPI) {
-  recognition = new SpeechRecognitionAPI();
+if (SpeechAPI) {
+  recognition = new SpeechAPI();
   recognition.lang = "ru-RU";
   recognition.continuous = false;
   recognition.interimResults = false;
-
-  voiceStatus.textContent = "● ДОСТУПЕН";
-  voiceStatus.classList.remove("demo");
+  $("voiceStatus").textContent = "● ДОСТУПЕН";
 
   recognition.onstart = () => {
-    isListening = true;
+    listening = true;
     voiceButton.textContent = "⏹";
-    voiceButton.title = "Остановить запись";
-    chatNote.textContent = "Слушаю… Говори после разрешения микрофона.";
+    chatNote.textContent = "Слушаю… Говори в микрофон.";
   };
 
   recognition.onresult = (event) => {
-    const transcript = event.results?.[0]?.[0]?.transcript;
-    if (transcript) {
-      messageInput.value = transcript;
-      messageInput.focus();
+    const result = event.results?.[0]?.[0]?.transcript;
+    if (result) {
+      input.value = result;
+      input.focus();
     }
   };
 
   recognition.onerror = (event) => {
-    const errorMessages = {
-      "not-allowed": "Разреши браузеру доступ к микрофону.",
+    const errors = {
+      "not-allowed": "Разреши доступ к микрофону в браузере.",
       "no-speech": "Речь не обнаружена. Попробуй ещё раз.",
-      "network": "Распознавание речи недоступно из-за ошибки сети."
+      "network": "Ошибка сети при распознавании речи."
     };
-
-    chatNote.textContent =
-      errorMessages[event.error] || `Ошибка голосового ввода: ${event.error}`;
+    chatNote.textContent = errors[event.error] || `Ошибка микрофона: ${event.error}`;
   };
 
   recognition.onend = () => {
-    isListening = false;
+    listening = false;
     voiceButton.textContent = "🎙";
-    voiceButton.title = "Голосовой ввод";
-
-    if (!isSending) {
-      chatNote.textContent = "Голосовой ввод готов. Нажми ➤, чтобы отправить сообщение.";
-    }
   };
 
   voiceButton.addEventListener("click", () => {
-    if (isListening) {
+    if (listening) {
       recognition.stop();
-      return;
-    }
-
-    try {
-      recognition.start();
-    } catch {
-      chatNote.textContent =
-        "Не удалось запустить микрофон. Подожди немного и попробуй снова.";
+    } else {
+      try {
+        recognition.start();
+      } catch {
+        chatNote.textContent = "Не удалось запустить микрофон. Попробуй ещё раз.";
+      }
     }
   });
 } else {
   voiceButton.disabled = true;
-  voiceStatus.textContent = "● НЕ ПОДДЕРЖИВАЕТСЯ";
-  voiceStatus.classList.add("demo");
-  voiceButton.title = "Этот браузер не поддерживает SpeechRecognition";
+  $("voiceStatus").textContent = "● НЕ ПОДДЕРЖИВАЕТСЯ";
 }
 
-/* При открытии страницы проверяем доступность backend. */
 checkServer();
 </script>
 </body>
