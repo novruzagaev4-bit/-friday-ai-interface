@@ -12,49 +12,47 @@
   --cyan:#39dcff;
   --blue:#168dff;
   --dark:#050d18;
-  --panel:rgba(8,30,49,.78);
+  --panel:rgba(8,30,49,.82);
   --line:rgba(57,220,255,.27);
   --text:#d8f7ff;
   --muted:#75aabd;
 }
 *{box-sizing:border-box}
 body{
-  margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(ellipse at 50% 35%,#10304a 0%,#071522 40%,#02070e 100%);
+  margin:0;min-height:100vh;
+  background:radial-gradient(ellipse at 50% 35%,#10304a,#071522 45%,#02070e);
   color:var(--text);
   font-family:Arial,Helvetica,sans-serif;
   overflow-x:hidden;
 }
 body:before{
-  content:"";
-  position:fixed;inset:0;
-  pointer-events:none;
+  content:"";position:fixed;inset:0;pointer-events:none;
   background-image:
     linear-gradient(rgba(57,220,255,.035) 1px,transparent 1px),
     linear-gradient(90deg,rgba(57,220,255,.035) 1px,transparent 1px);
   background-size:35px 35px;
-  mask-image:linear-gradient(to bottom,black,transparent);
 }
 header{
   height:68px;padding:0 25px;
   display:flex;align-items:center;justify-content:space-between;
   border-bottom:1px solid var(--line);
-  background:rgba(2,10,19,.8);
+  background:rgba(2,10,19,.85);
   position:relative;z-index:2;
 }
 .logo{font-size:19px;letter-spacing:4px;color:var(--cyan);font-weight:bold}
 .version{font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:5px}
 .top-status{font-size:11px;letter-spacing:1px;color:var(--cyan)}
+.dot{
+  display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:#32f4a1;box-shadow:0 0 9px #32f4a1;margin-right:7px;
+}
 .layout{
   max-width:1500px;margin:auto;padding:20px;
   display:grid;grid-template-columns:245px minmax(280px,1fr) 260px;
   gap:17px;min-height:calc(100vh - 68px);
 }
 .panel{
-  background:var(--panel);
-  border:1px solid var(--line);
+  background:var(--panel);border:1px solid var(--line);
   box-shadow:0 0 25px rgba(0,160,255,.06),inset 0 0 25px rgba(0,160,255,.025);
   clip-path:polygon(0 0,calc(100% - 15px) 0,100% 15px,100% 100%,15px 100%,0 calc(100% - 15px));
   padding:17px;
@@ -70,14 +68,11 @@ header{
   display:flex;justify-content:space-between;
   font-size:11px;color:#b8e9f5;margin-bottom:8px;
 }
-.dot{
-  display:inline-block;width:7px;height:7px;border-radius:50%;
-  background:#32f4a1;box-shadow:0 0 9px #32f4a1;margin-right:7px;
-}
 .bar{height:3px;background:#173b50;overflow:hidden}
 .bar span{
   display:block;height:100%;width:90%;
   background:var(--cyan);box-shadow:0 0 10px var(--cyan);
+  transition:width .4s;
 }
 .small-data{font-size:11px;color:var(--muted);line-height:2}
 .center{
@@ -86,38 +81,76 @@ header{
 }
 .core-area{
   width:100%;min-height:370px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;position:relative;overflow:hidden;
 }
 .core{
-  width:220px;height:220px;position:relative;
+  width:250px;height:250px;position:relative;
   display:flex;align-items:center;justify-content:center;
+  perspective:900px;transform-style:preserve-3d;
 }
-.ring{
-  position:absolute;border-radius:50%;border:1px solid var(--cyan);
-  box-shadow:0 0 12px rgba(57,220,255,.35),inset 0 0 12px rgba(57,220,255,.15);
+.reactor-ring{
+  position:absolute;border-radius:50%;
+  border:2px solid transparent;transform-style:preserve-3d;
 }
-.ring.one{inset:0;border-style:dashed;animation:spin 24s linear infinite}
-.ring.two{inset:15px;border-width:2px;border-color:#168dff;animation:spin 12s linear infinite reverse}
-.ring.three{inset:31px;border-style:dotted;animation:spin 18s linear infinite}
-.core-center{
-  width:105px;height:105px;border-radius:50%;
-  background:radial-gradient(circle,#b9faff 0%,#39dcff 12%,#0879c5 38%,#031827 72%);
-  box-shadow:0 0 25px #1dbbff,0 0 65px rgba(0,157,255,.55);
-  animation:pulse 3s ease-in-out infinite;
+.ring-a{
+  inset:5px;border-top-color:#75f3ff;border-bottom-color:#168dff;
+  box-shadow:0 0 15px #19caff;
+  animation:reactorSpin 7s linear infinite;
 }
-.core:before,.core:after{
-  content:"";position:absolute;border:1px solid rgba(57,220,255,.6);
-  border-radius:50%;inset:-12px;
+.ring-b{
+  inset:22px;border-left:3px solid #168dff;
+  border-right:3px solid #63eaff;
+  transform:rotateX(65deg);
+  animation:reactorReverse 5s linear infinite;
 }
-.core:after{inset:-25px;border-color:rgba(57,220,255,.2)}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes pulse{50%{transform:scale(1.08);filter:brightness(1.3)}}
+.ring-c{
+  inset:39px;border-top:2px dashed #b5faff;
+  border-bottom:2px dashed #168dff;
+  transform:rotateY(65deg);
+  animation:reactorSpin 9s linear infinite;
+}
+.ring-d{
+  inset:53px;border:2px solid rgba(57,220,255,.7);
+  box-shadow:inset 0 0 18px #168dff,0 0 20px #168dff;
+  animation:reactorPulse 2s ease-in-out infinite;
+}
+.reactor-inner{
+  width:90px;height:90px;border-radius:50%;
+  position:relative;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle,#fff 0%,#83f5ff 12%,#159bff 40%,#032c53 75%);
+  box-shadow:0 0 20px #39dcff,0 0 50px #168dff,0 0 90px rgba(22,141,255,.65);
+  animation:reactorPulse 2.5s ease-in-out infinite;
+}
+.reactor-light{
+  width:35px;height:35px;border-radius:50%;background:#fff;
+  box-shadow:0 0 25px #fff,0 0 55px #39dcff;
+}
+.reactor-cross{
+  position:absolute;width:125%;height:125%;
+  border:1px solid rgba(160,245,255,.5);border-radius:50%;
+}
+@keyframes reactorSpin{
+  from{transform:rotateX(25deg) rotateZ(0deg)}
+  to{transform:rotateX(25deg) rotateZ(360deg)}
+}
+@keyframes reactorReverse{
+  from{transform:rotateX(65deg) rotateZ(360deg)}
+  to{transform:rotateX(65deg) rotateZ(0deg)}
+}
+@keyframes reactorPulse{
+  0%,100%{filter:brightness(.85)}
+  50%{filter:brightness(1.5)}
+}
 .core-label{
   margin-top:24px;color:var(--cyan);letter-spacing:5px;
   font-size:17px;text-shadow:0 0 15px var(--cyan);
 }
 .core-sub{font-size:10px;letter-spacing:3px;color:var(--muted);margin-top:8px}
+#wakeStatus{
+  color:var(--cyan);font-size:10px;letter-spacing:2px;margin-top:10px;
+  text-align:center;
+}
 .visualizer{
   height:35px;display:flex;align-items:center;justify-content:center;gap:4px;
 }
@@ -163,10 +196,8 @@ button:disabled{opacity:.4;cursor:wait}
 .action-grid button{min-height:42px;font-size:10px}
 .info-value{font-size:12px;color:#c5f4ff;margin-top:7px}
 .clock{font-size:25px;color:var(--cyan);letter-spacing:3px}
-.footer{
-  text-align:center;color:#527d90;font-size:9px;
-  letter-spacing:2px;padding:8px;
-}
+.footer{text-align:center;color:#527d90;font-size:9px;letter-spacing:2px;padding:8px}
+
 @media(max-width:950px){
   .layout{grid-template-columns:1fr 1fr}
   .center{grid-column:1/-1;grid-row:1}
@@ -179,8 +210,8 @@ button:disabled{opacity:.4;cursor:wait}
   .top-status{font-size:9px}
   .layout{display:flex;flex-direction:column;padding:12px;gap:12px}
   .core-area{min-height:300px}
-  .core{width:185px;height:185px}
-  .core-center{width:85px;height:85px}
+  .core{width:215px;height:215px}
+  .reactor-inner{width:80px;height:80px}
   .left,.right{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .panel{padding:13px}
   .panel-title{font-size:9px}
@@ -228,7 +259,7 @@ button:disabled{opacity:.4;cursor:wait}
         <button onclick="quick('Представься')">IDENTITY</button>
         <button onclick="quick('Проведи диагностику системы')">DIAGNOSTICS</button>
         <button onclick="quick('Какие у тебя возможности?')">CAPABILITIES</button>
-        <button onclick="quick('Расскажи последние новости технологий')">TECH NEWS</button>
+        <button onclick="quick('Расскажи о технологиях')">TECHNOLOGY</button>
       </div>
     </section>
   </aside>
@@ -236,13 +267,20 @@ button:disabled{opacity:.4;cursor:wait}
   <section class="center">
     <div class="core-area">
       <div class="core" id="core">
-        <div class="ring one"></div>
-        <div class="ring two"></div>
-        <div class="ring three"></div>
-        <div class="core-center"></div>
+        <div class="reactor-ring ring-a"></div>
+        <div class="reactor-ring ring-b"></div>
+        <div class="reactor-ring ring-c"></div>
+        <div class="reactor-ring ring-d"></div>
+        <div class="reactor-inner">
+          <div class="reactor-light"></div>
+          <div class="reactor-cross"></div>
+        </div>
       </div>
+
       <div class="core-label">F.R.I.D.A.Y.</div>
       <div class="core-sub" id="coreState">ARTIFICIAL INTELLIGENCE SYSTEM</div>
+      <div id="wakeStatus">WAKE WORD: OFF</div>
+
       <div class="visualizer" id="visualizer">
         <span></span><span></span><span></span><span></span><span></span>
         <span></span><span></span><span></span><span></span><span></span>
@@ -262,7 +300,7 @@ button:disabled{opacity:.4;cursor:wait}
       </div>
       <div class="input-row">
         <input id="userInput" placeholder="Введите команду..." autocomplete="off">
-        <button class="voice-button" id="micButton" onclick="startListening()">🎙</button>
+        <button class="voice-button" id="micButton" onclick="toggleWakeWord()">🎙</button>
         <button id="sendButton" onclick="sendMessage()">SEND</button>
       </div>
     </section>
@@ -305,6 +343,8 @@ button:disabled{opacity:.4;cursor:wait}
       <div class="action-grid">
         <button onclick="stopSpeaking()">STOP VOICE</button>
         <button onclick="clearChat()">CLEAR CHAT</button>
+        <button onclick="toggleWakeWord()">MIC ON / OFF</button>
+        <button onclick="checkServer()">CHECK API</button>
       </div>
     </section>
   </aside>
@@ -322,8 +362,13 @@ const visualizer = document.getElementById("visualizer");
 
 let currentAudio = null;
 let currentAudioUrl = null;
-let recognition = null;
 let busy = false;
+let wakeRecognition = null;
+let commandRecognition = null;
+let wakeEnabled = false;
+let commandMode = false;
+let speechActive = false;
+let wakeRestartTimer = null;
 
 function addMessage(text, type){
   const div = document.createElement("div");
@@ -348,6 +393,10 @@ function setActivity(active, state){
   document.getElementById("mode").textContent = active ? "ACTIVE" : "STANDBY";
 }
 
+function updateWakeStatus(text){
+  document.getElementById("wakeStatus").textContent = text;
+}
+
 function cleanupAudio(){
   if(currentAudio){
     currentAudio.pause();
@@ -361,31 +410,57 @@ function cleanupAudio(){
 
 function stopSpeaking(){
   cleanupAudio();
-  if("speechSynthesis" in window) speechSynthesis.cancel();
+  speechActive = false;
+
+  if("speechSynthesis" in window){
+    speechSynthesis.cancel();
+  }
+
   setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
   document.getElementById("voiceStatus").textContent = "STANDBY";
 }
 
 function browserVoice(text){
-  if(!("speechSynthesis" in window)) return;
-  speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "ru-RU";
-  utterance.rate = 0.92;
-  utterance.pitch = 0.85;
-  utterance.onstart = () => {
-    setActivity(true, "BROWSER VOICE ACTIVE");
-    document.getElementById("voiceStatus").textContent = "ACTIVE";
-  };
-  utterance.onend = () => {
-    setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
-    document.getElementById("voiceStatus").textContent = "STANDBY";
-  };
-  speechSynthesis.speak(utterance);
+  return new Promise(resolve => {
+    if(!("speechSynthesis" in window)){
+      speechActive = false;
+      resolve();
+      return;
+    }
+
+    speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "ru-RU";
+    utterance.rate = 0.92;
+    utterance.pitch = 0.85;
+
+    utterance.onstart = () => {
+      speechActive = true;
+      setActivity(true, "BROWSER VOICE ACTIVE");
+      document.getElementById("voiceStatus").textContent = "ACTIVE";
+    };
+
+    utterance.onend = () => {
+      speechActive = false;
+      setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
+      document.getElementById("voiceStatus").textContent = "STANDBY";
+      resolve();
+    };
+
+    utterance.onerror = () => {
+      speechActive = false;
+      resolve();
+    };
+
+    speechSynthesis.speak(utterance);
+  });
 }
 
 async function speak(text){
   cleanupAudio();
+  speechActive = true;
+
   document.getElementById("voiceStatus").textContent = "CONNECTING";
   setActivity(true, "VOICE ENGINE INITIALIZING");
 
@@ -404,23 +479,41 @@ async function speak(text){
     currentAudioUrl = URL.createObjectURL(blob);
     currentAudio = new Audio(currentAudioUrl);
 
-    currentAudio.onended = () => {
-      cleanupAudio();
+    await new Promise(async resolve => {
+      currentAudio.onended = () => {
+        cleanupAudio();
+        resolve();
+      };
+
+      currentAudio.onerror = () => {
+        cleanupAudio();
+        resolve();
+      };
+
+      try{
+        await currentAudio.play();
+        document.getElementById("voiceStatus").textContent = "ACTIVE";
+        setActivity(true, "F.R.I.D.A.Y. SPEAKING");
+      }catch(error){
+        cleanupAudio();
+        resolve();
+      }
+    });
+
+    if(!currentAudio && !speechActive){
       setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
       document.getElementById("voiceStatus").textContent = "STANDBY";
-    };
+      return;
+    }
 
-    currentAudio.onerror = () => {
-      cleanupAudio();
-      browserVoice(text);
-    };
-
-    await currentAudio.play();
-    document.getElementById("voiceStatus").textContent = "ACTIVE";
-    setActivity(true, "F.R.I.D.A.Y. SPEAKING");
+    if(speechActive){
+      speechActive = false;
+      setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
+      document.getElementById("voiceStatus").textContent = "STANDBY";
+    }
   }catch(error){
     console.warn("Cloud voice unavailable:", error);
-    browserVoice(text);
+    await browserVoice(text);
   }
 }
 
@@ -431,6 +524,7 @@ async function sendMessage(){
   stopSpeaking();
   addMessage(text, "user");
   input.value = "";
+
   busy = true;
   sendButton.disabled = true;
   sendButton.textContent = "...";
@@ -477,28 +571,23 @@ input.addEventListener("keydown", event => {
   if(event.key === "Enter") sendMessage();
 });
 
+/* MANUAL VOICE INPUT */
+
 function startListening(){
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
 
   if(!SpeechRecognition){
-    addMessage("Голосовой ввод не поддерживается этим браузером. Попробуй Chrome.", "ai");
+    addMessage("Голосовой ввод не поддерживается. Попробуй Chrome.", "ai");
     return;
   }
 
-  if(recognition){
-    recognition.stop();
-    recognition = null;
-  }
-
-  recognition = new SpeechRecognition();
+  const recognition = new SpeechRecognition();
   recognition.lang = "ru-RU";
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
 
-  recognition.onstart = () => {
-    setActivity(true, "LISTENING...");
-    document.getElementById("micButton").textContent = "●";
-  };
+  recognition.onstart = () => setActivity(true, "LISTENING...");
 
   recognition.onresult = event => {
     input.value = event.results[0][0].transcript;
@@ -507,51 +596,58 @@ function startListening(){
 
   recognition.onerror = event => {
     addMessage("Ошибка голосового ввода: " + event.error, "ai");
-    setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
   };
 
   recognition.onend = () => {
-    document.getElementById("micButton").textContent = "🎙";
-    if(!busy && !currentAudio) setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
+    if(!busy && !speechActive){
+      setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
+    }
   };
 
   recognition.start();
 }
 
-async function checkServer(){
-  try{
-    const response = await fetch(API_BASE + "/health");
-    if(!response.ok) throw new Error("Offline");
+/* WAKE WORD: ПРИВЕТ, ПЯТНИЦА */
 
-    const data = await response.json();
-
-    document.getElementById("apiStatus").textContent = "ONLINE";
-    document.getElementById("serverStatus").textContent = "CONNECTED";
-    document.getElementById("topStatus").textContent = "SYSTEM ONLINE";
-    document.getElementById("topDot").style.background = "#32f4a1";
-    document.getElementById("apiBar").style.width = "100%";
-
-    if(data.model){
-      document.getElementById("serverStatus").textContent = "CONNECTED // " + data.provider;
-    }
-  }catch(error){
-    document.getElementById("apiStatus").textContent = "OFFLINE";
-    document.getElementById("serverStatus").textContent = "UNAVAILABLE";
-    document.getElementById("topStatus").textContent = "SERVER OFFLINE";
-    document.getElementById("topDot").style.background = "#ff5757";
-    document.getElementById("apiBar").style.width = "10%";
+function toggleWakeWord(){
+  if(wakeEnabled){
+    disableWakeWord();
+  }else{
+    enableWakeWord();
   }
 }
 
-function updateClock(){
-  document.getElementById("clock").textContent =
-    new Date().toLocaleTimeString("ru-RU");
-}
+function enableWakeWord(){
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
 
-setInterval(updateClock, 1000);
-updateClock();
-checkServer();
-setInterval(checkServer, 60000);
-</script>
-</body>
-</html>
+  if(!SpeechRecognition){
+    updateWakeStatus("MICROPHONE NOT SUPPORTED");
+    addMessage("Голосовая активация не поддерживается этим браузером. Попробуй Chrome.", "ai");
+    return;
+  }
+
+  wakeEnabled = true;
+  commandMode = false;
+
+  wakeRecognition = new SpeechRecognition();
+  wakeRecognition.lang = "ru-RU";
+  wakeRecognition.continuous = true;
+  wakeRecognition.interimResults = false;
+  wakeRecognition.maxAlternatives = 1;
+
+  wakeRecognition.onstart = () => {
+    updateWakeStatus("● ОЖИДАНИЕ: «ПРИВЕТ, ПЯТНИЦА»");
+    document.getElementById("micButton").textContent = "🔵";
+  };
+
+  wakeRecognition.onresult = event => {
+    const result = event.results[event.results.length - 1][0].transcript
+      .toLowerCase()
+      .replace(/[.,!?]/g, "")
+      .trim();
+
+    console.log("Recognized:", result);
+
+    if(!commandMode &&
+      (
