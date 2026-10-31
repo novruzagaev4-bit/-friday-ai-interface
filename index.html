@@ -5,11 +5,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#050b12">
-<title>F.R.I.D.A.Y. — Stark Industries</title>
+
+<title>F.R.I.D.A.Y. — Personal AI</title>
+
 <style>
 :root {
   --bg:#050b12;
-  --panel:rgba(8,22,34,.92);
+  --panel:rgba(8,22,34,.94);
   --cyan:#00eaff;
   --blue:#008cff;
   --text:#d9faff;
@@ -18,187 +20,573 @@
   --red:#ff637c;
   --green:#42ffb0;
 }
-*{box-sizing:border-box}
-body{
-  margin:0;min-height:100vh;background:
-  radial-gradient(ellipse at 50% 35%,#0b2639,transparent 48%),
-  linear-gradient(135deg,#03070d,#071421 60%,#02060b);
-  color:var(--text);font-family:Segoe UI,Arial,sans-serif;
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse at 50% 35%,#0b2639,transparent 48%),
+    linear-gradient(135deg,#03070d,#071421 60%,#02060b);
+  color:var(--text);
+  font-family:Segoe UI,Arial,sans-serif;
 }
-body:before{
-  content:"";position:fixed;inset:0;pointer-events:none;opacity:.15;
-  background-image:linear-gradient(rgba(0,234,255,.15) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(0,234,255,.15) 1px,transparent 1px);
+
+body:before {
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.15;
+  background-image:
+    linear-gradient(rgba(0,234,255,.15) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,234,255,.15) 1px,transparent 1px);
   background-size:35px 35px;
 }
-button,input{font:inherit}
-button{cursor:pointer}
-header{
-  position:relative;display:flex;justify-content:space-between;
-  align-items:center;gap:12px;padding:18px 4%;
-  border-bottom:1px solid var(--border);background:#020910d9;
+
+button,input { font:inherit; }
+button { cursor:pointer; }
+
+header {
+  position:relative;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:18px 4%;
+  border-bottom:1px solid var(--border);
+  background:#020910d9;
 }
-.brand{display:flex;align-items:center;gap:12px}
-.brand-icon{
-  width:42px;height:42px;border:1px solid var(--cyan);
-  color:var(--cyan);border-radius:50%;display:grid;place-items:center;
-  font-size:24px;box-shadow:0 0 20px #00eaff30;
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
-.brand h1{margin:0;font-size:20px;letter-spacing:4px}
-.brand small{display:block;margin-top:4px;font-size:9px;letter-spacing:2px;color:var(--muted)}
-.header-right{text-align:right;font-size:10px;color:var(--muted)}
-.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:6px}
-.dot.offline{background:var(--red)}
-main{
-  position:relative;display:grid;grid-template-columns:.8fr 1fr 1.35fr;
-  gap:18px;width:min(1500px,100%);margin:auto;padding:25px 4%;
+
+.brand-icon {
+  width:42px;
+  height:42px;
+  border:1px solid var(--cyan);
+  color:var(--cyan);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:24px;
+  box-shadow:0 0 20px #00eaff30;
 }
-.panel{min-width:0;border:1px solid var(--border);background:var(--panel);border-radius:5px}
-.panel-title{padding:15px;border-bottom:1px solid var(--border);font-size:10px;letter-spacing:2px;color:var(--cyan)}
-.left-content{padding:14px}
-.module{padding:13px;margin-bottom:12px;border:1px solid #00eaff25;background:#00eaff05}
-.module-name{font-size:12px;letter-spacing:1px}
-.module-description{font-size:10px;color:var(--muted);margin-top:7px;line-height:1.6}
-.module-status{font-size:9px;color:var(--green);margin-top:10px}
-.center{min-height:400px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px 10px}
-.core{
-  width:min(210px,60vw);aspect-ratio:1;border:1px solid #00eaffaa;border-radius:50%;
-  display:grid;place-items:center;position:relative;
+
+.brand h1 {
+  margin:0;
+  font-size:20px;
+  letter-spacing:4px;
+}
+
+.brand small {
+  display:block;
+  margin-top:4px;
+  font-size:9px;
+  letter-spacing:2px;
+  color:var(--muted);
+}
+
+.header-right {
+  text-align:right;
+  font-size:10px;
+  color:var(--muted);
+}
+
+.dot {
+  display:inline-block;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--green);
+  margin-right:6px;
+}
+
+.dot.offline { background:var(--red); }
+
+main {
+  position:relative;
+  display:grid;
+  grid-template-columns:.8fr 1fr 1.35fr;
+  gap:18px;
+  width:min(1500px,100%);
+  margin:auto;
+  padding:25px 4%;
+}
+
+.panel {
+  min-width:0;
+  border:1px solid var(--border);
+  background:var(--panel);
+  border-radius:5px;
+}
+
+.panel-title {
+  padding:15px;
+  border-bottom:1px solid var(--border);
+  font-size:10px;
+  letter-spacing:2px;
+  color:var(--cyan);
+}
+
+.left-content { padding:14px; }
+
+.module {
+  padding:13px;
+  margin-bottom:12px;
+  border:1px solid #00eaff25;
+  background:#00eaff05;
+}
+
+.module-name {
+  font-size:12px;
+  letter-spacing:1px;
+}
+
+.module-description {
+  font-size:10px;
+  color:var(--muted);
+  margin-top:7px;
+  line-height:1.6;
+}
+
+.module-status {
+  font-size:9px;
+  color:var(--green);
+  margin-top:10px;
+}
+
+.center {
+  min-height:400px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px 10px;
+}
+
+.core {
+  width:min(210px,60vw);
+  aspect-ratio:1;
+  border:1px solid #00eaffaa;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  position:relative;
   box-shadow:0 0 28px #00eaff25,inset 0 0 35px #008cff22;
   animation:pulse 4s ease-in-out infinite;
 }
-.core:before,.core:after{
-  content:"";position:absolute;inset:13px;border:1px dashed #00eaff80;border-radius:50%;
+
+.core:before,.core:after {
+  content:"";
+  position:absolute;
+  inset:13px;
+  border:1px dashed #00eaff80;
+  border-radius:50%;
   animation:spin 18s linear infinite;
 }
-.core:after{inset:-12px;border-style:solid;border-color:#008cff55;border-left-color:transparent;border-right-color:transparent;animation-duration:12s;animation-direction:reverse}
-.core-inner{width:58%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#caffff,#00bfff 25%,#064e86 58%,transparent 72%);filter:drop-shadow(0 0 16px var(--cyan))}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes pulse{50%{transform:scale(1.035)}}
-.core-label{margin-top:30px;font-size:16px;letter-spacing:4px}
-.core-subtitle{margin-top:10px;font-size:10px;letter-spacing:2px;color:var(--muted)}
-.equalizer{display:flex;gap:4px;height:22px;align-items:center;margin-top:22px}
-.equalizer span{width:3px;height:6px;background:var(--cyan);animation:wave .8s ease-in-out infinite alternate}
-.equalizer span:nth-child(2n){animation-delay:.2s}
-.equalizer span:nth-child(3n){animation-delay:.4s}
-@keyframes wave{to{height:21px}}
-.chat-panel{display:flex;flex-direction:column;height:min(700px,calc(100vh - 135px));min-height:500px}
-.chat-heading{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.clear-button{background:transparent;border:1px solid var(--border);color:var(--muted);padding:7px;font-size:10px}
-.messages{flex:1;min-height:200px;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:13px}
-.message{max-width:95%;align-self:flex-start;border:1px solid var(--border);background:#00eaff08;padding:12px;border-radius:4px;overflow-wrap:anywhere}
-.message.user{align-self:flex-end;border-color:#008cff80;background:#008cff18}
-.message.error{border-color:#ff637c99}
-.message-label{font-size:9px;letter-spacing:1px;color:var(--cyan);margin-bottom:7px}
-.message.user .message-label{color:#6ab9ff}
-.message.error .message-label{color:var(--red)}
-.message-text{font-size:13px;line-height:1.65;white-space:pre-wrap}
-.chat-form{border-top:1px solid var(--border);padding:12px}
-.input-row{display:flex;gap:7px}
-#messageInput{min-width:0;flex:1;background:#0005;color:var(--text);border:1px solid var(--border);padding:12px;outline:none;border-radius:3px}
-#messageInput:focus{border-color:var(--cyan)}
-.action-button{min-width:43px;padding:9px;background:#00eaff10;border:1px solid var(--cyan);color:var(--cyan);border-radius:3px}
-.action-button:disabled{opacity:.4;cursor:not-allowed}
-.bottom-note{margin-top:10px;color:var(--muted);font-size:9px;line-height:1.6}
-footer{position:relative;text-align:center;padding:15px;border-top:1px solid var(--border);color:#557685;font-size:9px;letter-spacing:1px}
-@media(max-width:950px){main{grid-template-columns:1fr 1.3fr}.left-panel{display:none}.center{min-height:350px}}
-@media(max-width:620px){
-  header{padding:14px 4%}.brand h1{font-size:17px;letter-spacing:3px}
-  .brand small{font-size:8px;letter-spacing:1px}
-  main{display:flex;flex-direction:column;padding:14px 4%;gap:14px}
-  .center{min-height:290px}.core{width:145px}
-  .core-label{margin-top:24px}.chat-panel{height:520px;min-height:450px}
+
+.core:after {
+  inset:-12px;
+  border-style:solid;
+  border-color:#008cff55;
+  border-left-color:transparent;
+  border-right-color:transparent;
+  animation-duration:12s;
+  animation-direction:reverse;
+}
+
+.core-inner {
+  width:58%;
+  aspect-ratio:1;
+  border-radius:50%;
+  background:radial-gradient(
+    circle,#caffff,#00bfff 25%,#064e86 58%,transparent 72%
+  );
+  filter:drop-shadow(0 0 16px var(--cyan));
+}
+
+@keyframes spin {
+  to { transform:rotate(360deg); }
+}
+
+@keyframes pulse {
+  50% { transform:scale(1.035); }
+}
+
+.core-label {
+  margin-top:30px;
+  font-size:16px;
+  letter-spacing:4px;
+}
+
+.core-subtitle {
+  margin-top:10px;
+  font-size:10px;
+  letter-spacing:2px;
+  color:var(--muted);
+}
+
+.equalizer {
+  display:flex;
+  gap:4px;
+  height:22px;
+  align-items:center;
+  margin-top:22px;
+}
+
+.equalizer span {
+  width:3px;
+  height:6px;
+  background:var(--cyan);
+  animation:wave .8s ease-in-out infinite alternate;
+}
+
+.equalizer span:nth-child(2n) { animation-delay:.2s; }
+.equalizer span:nth-child(3n) { animation-delay:.4s; }
+
+@keyframes wave {
+  to { height:21px; }
+}
+
+body.listening .core,
+body.speaking .core {
+  box-shadow:0 0 50px #00eaff80,inset 0 0 45px #008cff55;
+  animation:pulse .8s ease-in-out infinite;
+}
+
+.chat-panel {
+  display:flex;
+  flex-direction:column;
+  height:min(700px,calc(100vh - 135px));
+  min-height:500px;
+}
+
+.chat-heading {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+}
+
+.clear-button {
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--muted);
+  padding:7px;
+  font-size:10px;
+}
+
+.messages {
+  flex:1;
+  min-height:200px;
+  overflow-y:auto;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:13px;
+}
+
+.message {
+  max-width:95%;
+  align-self:flex-start;
+  border:1px solid var(--border);
+  background:#00eaff08;
+  padding:12px;
+  border-radius:4px;
+  overflow-wrap:anywhere;
+}
+
+.message.user {
+  align-self:flex-end;
+  border-color:#008cff80;
+  background:#008cff18;
+}
+
+.message.error { border-color:#ff637c99; }
+
+.message-label {
+  font-size:9px;
+  letter-spacing:1px;
+  color:var(--cyan);
+  margin-bottom:7px;
+}
+
+.message.user .message-label { color:#6ab9ff; }
+.message.error .message-label { color:var(--red); }
+
+.message-text {
+  font-size:13px;
+  line-height:1.65;
+  white-space:pre-wrap;
+}
+
+.chat-form {
+  border-top:1px solid var(--border);
+  padding:12px;
+}
+
+.input-row {
+  display:flex;
+  gap:7px;
+}
+
+#messageInput {
+  min-width:0;
+  flex:1;
+  background:#0005;
+  color:var(--text);
+  border:1px solid var(--border);
+  padding:12px;
+  outline:none;
+  border-radius:3px;
+}
+
+#messageInput:focus { border-color:var(--cyan); }
+
+.action-button {
+  min-width:43px;
+  padding:9px;
+  background:#00eaff10;
+  border:1px solid var(--cyan);
+  color:var(--cyan);
+  border-radius:3px;
+}
+
+.action-button:disabled {
+  opacity:.4;
+  cursor:not-allowed;
+}
+
+.bottom-note {
+  margin-top:10px;
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.6;
+}
+
+footer {
+  position:relative;
+  text-align:center;
+  padding:15px;
+  border-top:1px solid var(--border);
+  color:#557685;
+  font-size:9px;
+  letter-spacing:1px;
+}
+
+@media(max-width:950px) {
+  main { grid-template-columns:1fr 1.3fr; }
+  .left-panel { display:none; }
+  .center { min-height:350px; }
+}
+
+@media(max-width:620px) {
+  header { padding:14px 4%; }
+  .brand h1 { font-size:17px;letter-spacing:3px; }
+  .brand small { font-size:8px;letter-spacing:1px; }
+
+  main {
+    display:flex;
+    flex-direction:column;
+    padding:14px 4%;
+    gap:14px;
+  }
+
+  .center { min-height:290px; }
+  .core { width:145px; }
+  .core-label { margin-top:24px; }
+
+  .chat-panel {
+    height:520px;
+    min-height:450px;
+  }
 }
 </style>
 </head>
+
 <body>
+
 <header>
   <div class="brand">
     <div class="brand-icon">F</div>
-    <div><h1>F.R.I.D.A.Y.</h1><small>STARK INDUSTRIES · PERSONAL AI</small></div>
+    <div>
+      <h1>F.R.I.D.A.Y.</h1>
+      <small>STARK INDUSTRIES · PERSONAL AI</small>
+    </div>
   </div>
+
   <div class="header-right">
-    <div><span class="dot offline" id="statusDot"></span><span id="connectionStatus">ПРОВЕРКА...</span></div>
-    <div style="margin-top:7px">INTERFACE v2.0</div>
+    <div>
+      <span class="dot offline" id="statusDot"></span>
+      <span id="connectionStatus">ПРОВЕРКА...</span>
+    </div>
+    <div style="margin-top:7px">INTERFACE v3.0</div>
   </div>
 </header>
 
 <main>
-  <section class="panel left-panel">
-    <div class="panel-title">СИСТЕМНЫЕ МОДУЛИ</div>
-    <div class="left-content">
-      <div class="module">
-        <div class="module-name">F.R.I.D.A.Y. CORE</div>
-        <div class="module-description">Главный интерфейс ИИ-помощника</div>
-        <div class="module-status">● ONLINE</div>
-      </div>
-      <div class="module">
-        <div class="module-name">QADAM AI</div>
-        <div class="module-description">Бизнес-проект и экосистема</div>
-        <div class="module-status">● CONNECTED</div>
-      </div>
-      <div class="module">
-        <div class="module-name">NEURAL NETWORK</div>
-        <div class="module-description">Ответы через Python API</div>
-        <div class="module-status" id="modelStatus">● ПРОВЕРКА</div>
-      </div>
-      <div class="module">
-        <div class="module-name">VOICE INPUT</div>
-        <div class="module-description">Распознавание речи браузером</div>
-        <div class="module-status" id="voiceStatus">● ПРОВЕРКА</div>
-      </div>
-    </div>
-  </section>
 
-  <section class="panel center">
-    <div class="core"><div class="core-inner"></div></div>
-    <div class="core-label">F.R.I.D.A.Y.</div>
-    <div class="core-subtitle" id="coreSubtitle">PERSONAL AI SYSTEM</div>
-    <div class="equalizer" aria-hidden="true">
-      <span></span><span></span><span></span><span></span><span></span>
-      <span></span><span></span><span></span><span></span><span></span>
-    </div>
-  </section>
+<section class="panel left-panel">
+  <div class="panel-title">СИСТЕМНЫЕ МОДУЛИ</div>
 
-  <section class="panel chat-panel">
-    <div class="panel-title chat-heading">
-      <span>НЕЙРОННЫЙ ИНТЕРФЕЙС</span>
-      <button type="button" class="clear-button" id="clearButton">ОЧИСТИТЬ</button>
+  <div class="left-content">
+
+    <div class="module">
+      <div class="module-name">F.R.I.D.A.Y. CORE</div>
+      <div class="module-description">Главный ИИ-помощник</div>
+      <div class="module-status">● ONLINE</div>
     </div>
-    <div class="messages" id="messages" aria-live="polite">
-      <div class="message">
-        <div class="message-label">F.R.I.D.A.Y. · SYSTEM</div>
-        <div class="message-text">Интерфейс запущен. Проверяю подключение к Python-серверу…</div>
-      </div>
+
+    <div class="module">
+      <div class="module-name">QADAM AI</div>
+      <div class="module-description">Бизнес-проект и экосистема</div>
+      <div class="module-status">● CONNECTED</div>
     </div>
-    <form class="chat-form" id="chatForm">
-      <div class="input-row">
-        <input id="messageInput" type="text" placeholder="Введите сообщение..." autocomplete="off" maxlength="4000" required aria-label="Сообщение">
-        <button class="action-button" type="button" id="voiceButton" title="Голосовой ввод" aria-label="Голосовой ввод">🎙</button>
-        <button class="action-button" type="submit" id="sendButton" aria-label="Отправить">➤</button>
-      </div>
-      <div class="bottom-note" id="chatNote">Сообщения отправляются на Python API. Демонстрационные ответы отключены.</div>
-    </form>
-  </section>
+
+    <div class="module">
+      <div class="module-name">NEURAL NETWORK</div>
+      <div class="module-description">OpenRouter Python API</div>
+      <div class="module-status" id="modelStatus">● ПРОВЕРКА</div>
+    </div>
+
+    <div class="module">
+      <div class="module-name">VOICE INPUT</div>
+      <div class="module-description">Распознавание речи</div>
+      <div class="module-status" id="voiceStatus">● ПРОВЕРКА</div>
+    </div>
+
+    <div class="module">
+      <div class="module-name">VOICE OUTPUT</div>
+      <div class="module-description">Cinematic voice system</div>
+      <div class="module-status" id="speechStatus">● ПРОВЕРКА</div>
+    </div>
+
+    <div class="module">
+      <div class="module-name">MEMORY</div>
+      <div class="module-description">Локальная история сообщений</div>
+      <div class="module-status" id="memoryStatus">● LOCAL</div>
+    </div>
+
+  </div>
+</section>
+
+<section class="panel center">
+
+  <div class="core">
+    <div class="core-inner"></div>
+  </div>
+
+  <div class="core-label">F.R.I.D.A.Y.</div>
+
+  <div class="core-subtitle" id="coreSubtitle">
+    PERSONAL AI SYSTEM
+  </div>
+
+  <div class="equalizer" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+</section>
+
+<section class="panel chat-panel">
+
+  <div class="panel-title chat-heading">
+    <span>НЕЙРОННЫЙ ИНТЕРФЕЙС</span>
+    <button type="button" class="clear-button" id="clearButton">
+      ОЧИСТИТЬ
+    </button>
+  </div>
+
+  <div class="messages" id="messages" aria-live="polite"></div>
+
+  <form class="chat-form" id="chatForm">
+
+    <div class="input-row">
+
+      <input
+        id="messageInput"
+        type="text"
+        placeholder="Введите сообщение..."
+        autocomplete="off"
+        maxlength="4000"
+        required
+        aria-label="Сообщение"
+      >
+
+      <button
+        class="action-button"
+        type="button"
+        id="voiceButton"
+        title="Голосовой ввод"
+        aria-label="Голосовой ввод"
+      >🎙</button>
+
+      <button
+        class="action-button"
+        type="button"
+        id="speechButton"
+        title="Голосовые ответы"
+        aria-label="Голосовые ответы"
+      >🔊</button>
+
+      <button
+        class="action-button"
+        type="submit"
+        id="sendButton"
+        aria-label="Отправить"
+      >➤</button>
+
+    </div>
+
+    <div class="bottom-note" id="chatNote">
+      Инициализация F.R.I.D.A.Y...
+    </div>
+
+  </form>
+</section>
+
 </main>
 
-<footer>F.R.I.D.A.Y. PERSONAL AI · PROJECT QADAM AI · PERSONAL PROJECT</footer>
+<footer>
+  F.R.I.D.A.Y. PERSONAL AI · PROJECT QADAM AI · VERSION 3.0
+</footer>
 
 <script>
 "use strict";
 
-/* Адрес твоего Render backend */
-const API_BASE = "https://friday-ai-backend-gfc4.onrender.com";
+// ======================================
+// CONFIGURATION
+// ======================================
 
-const $ = (id) => document.getElementById(id);
+const API_BASE =
+  "https://friday-ai-backend-gfc4.onrender.com";
+
+const STORAGE_KEY = "friday_chat_history_v3";
+
+const VOICE_KEY = "friday_voice_enabled";
+
+const $ = id => document.getElementById(id);
+
 const messages = $("messages");
 const form = $("chatForm");
 const input = $("messageInput");
 const sendButton = $("sendButton");
 const voiceButton = $("voiceButton");
+const speechButton = $("speechButton");
+
 const statusDot = $("statusDot");
 const connectionStatus = $("connectionStatus");
 const modelStatus = $("modelStatus");
+const voiceStatus = $("voiceStatus");
+const speechStatus = $("speechStatus");
+const memoryStatus = $("memoryStatus");
 const coreSubtitle = $("coreSubtitle");
 const chatNote = $("chatNote");
 
@@ -206,9 +594,106 @@ let busy = false;
 let recognition = null;
 let listening = false;
 
-function addMessage(label, text, type = "assistant") {
+let voiceEnabled =
+  localStorage.getItem(VOICE_KEY) !== "false";
+
+const synth = window.speechSynthesis;
+
+let availableVoices = [];
+
+
+// ======================================
+// LOCAL MEMORY
+// ======================================
+
+function saveHistory() {
+  const history = [];
+
+  messages.querySelectorAll(".message").forEach(box => {
+    const label = box.querySelector(".message-label");
+    const content = box.querySelector(".message-text");
+
+    if (!label || !content) return;
+
+    history.push({
+      label: label.textContent,
+      text: content.textContent,
+      type: box.classList.contains("user")
+        ? "user"
+        : box.classList.contains("error")
+        ? "error"
+        : "assistant"
+    });
+  });
+
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(history.slice(-100))
+    );
+
+    memoryStatus.textContent = "● SAVED";
+
+  } catch (error) {
+    memoryStatus.textContent = "● STORAGE ERROR";
+  }
+}
+
+function loadHistory() {
+  try {
+    const history = JSON.parse(
+      localStorage.getItem(STORAGE_KEY) || "[]"
+    );
+
+    if (Array.isArray(history)) {
+      history.slice(-100).forEach(item => {
+        addMessage(
+          item.label,
+          item.text,
+          item.type,
+          false
+        );
+      });
+    }
+  } catch (error) {
+    localStorage.removeItem(STORAGE_KEY);
+  }
+
+  if (!messages.children.length) {
+    addMessage(
+      "F.R.I.D.A.Y. · SYSTEM",
+      "Система запущена. Готова к работе."
+    );
+  }
+
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function clearHistory() {
+  messages.replaceChildren();
+
+  localStorage.removeItem(STORAGE_KEY);
+
+  if (synth) synth.cancel();
+
+  addMessage(
+    "F.R.I.D.A.Y. · SYSTEM",
+    "История очищена. Готова к новому разговору."
+  );
+
+  saveHistory();
+}
+
+
+// ======================================
+// MESSAGE INTERFACE
+// ======================================
+
+function addMessage(label, text, type = "assistant", save = true) {
   const box = document.createElement("div");
-  box.className = "message" +
+
+  box.className =
+    "message" +
     (type === "user" ? " user" : "") +
     (type === "error" ? " error" : "");
 
@@ -222,173 +707,349 @@ function addMessage(label, text, type = "assistant") {
 
   box.append(heading, content);
   messages.appendChild(box);
+
   messages.scrollTop = messages.scrollHeight;
+
+  if (save) saveHistory();
+
   return box;
 }
 
+
+// ======================================
+// CINEMATIC VOICE
+// ======================================
+
+function loadVoices() {
+  if (!synth) return;
+
+  availableVoices = synth.getVoices();
+
+  speechStatus.textContent =
+    availableVoices.length
+      ? "● VOICES READY"
+      : "● LOADING VOICES";
+}
+
+if (synth) {
+  loadVoices();
+
+  synth.addEventListener(
+    "voiceschanged",
+    loadVoices
+  );
+} else {
+  speechStatus.textContent =
+    "● NOT SUPPORTED";
+}
+
+function getFridayVoice() {
+  const russian = availableVoices.filter(
+    voice => voice.lang.toLowerCase().startsWith("ru")
+  );
+
+  return (
+    russian.find(voice =>
+      /female|woman|жен|milena|alena|katya/i.test(voice.name)
+    ) ||
+    russian[0] ||
+    null
+  );
+}
+
+function speak(text) {
+  if (!voiceEnabled || !synth || !text) return;
+
+  synth.cancel();
+
+  const utterance =
+    new SpeechSynthesisUtterance(text);
+
+  const voice = getFridayVoice();
+
+  utterance.lang = "ru-RU";
+  utterance.rate = 0.92;
+  utterance.pitch = 0.90;
+  utterance.volume = 1;
+
+  if (voice) {
+    utterance.voice = voice;
+  }
+
+  utterance.onstart = () => {
+    document.body.classList.add("speaking");
+
+    coreSubtitle.textContent =
+      "F.R.I.D.A.Y. SPEAKING";
+  };
+
+  utterance.onend = () => {
+    document.body.classList.remove("speaking");
+
+    if (!listening) {
+      coreSubtitle.textContent =
+        "PERSONAL AI SYSTEM";
+    }
+  };
+
+  utterance.onerror = () => {
+    document.body.classList.remove("speaking");
+
+    coreSubtitle.textContent =
+      "PERSONAL AI SYSTEM";
+  };
+
+  synth.speak(utterance);
+}
+
+function updateSpeechButton() {
+  speechButton.textContent =
+    voiceEnabled ? "🔊" : "🔇";
+
+  speechButton.title =
+    voiceEnabled
+      ? "Отключить голос"
+      : "Включить голос";
+}
+
+speechButton.addEventListener("click", () => {
+  voiceEnabled = !voiceEnabled;
+
+  localStorage.setItem(
+    VOICE_KEY,
+    String(voiceEnabled)
+  );
+
+  if (!voiceEnabled && synth) {
+    synth.cancel();
+  }
+
+  updateSpeechButton();
+});
+
+updateSpeechButton();
+
+
+// ======================================
+// SERVER CONNECTION
+// ======================================
+
 function setStatus(online, label) {
-  statusDot.classList.toggle("offline", !online);
+  statusDot.classList.toggle(
+    "offline",
+    !online
+  );
+
   connectionStatus.textContent = label;
 }
 
 async function checkServer() {
   try {
-    const response = await fetch(`${API_BASE}/health`, {
-      headers: { Accept: "application/json" }
-    });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const response = await fetch(
+      `${API_BASE}/health`
+    );
+
+    if (!response.ok) {
+      throw new Error("Server unavailable");
+    }
 
     const data = await response.json();
+
     setStatus(true, "СЕРВЕР ДОСТУПЕН");
-    modelStatus.textContent = "● BACKEND ONLINE";
+
+    modelStatus.textContent =
+      data.provider || "● BACKEND ONLINE";
+
     chatNote.textContent =
-      "Сервер доступен. Отправь сообщение для проверки языковой модели.";
+      "F.R.I.D.A.Y. готова к работе.";
+
     return data;
+
   } catch (error) {
     setStatus(false, "СЕРВЕР НЕДОСТУПЕН");
-    modelStatus.textContent = "● ОШИБКА ПОДКЛЮЧЕНИЯ";
+
+    modelStatus.textContent =
+      "● CONNECTION ERROR";
+
     chatNote.textContent =
-      "Не удалось подключиться. Проверь URL сервера и настройки CORS.";
+      "Проверь адрес Render и подключение.";
+
     return null;
   }
 }
 
+
+// ======================================
+// SEND MESSAGE
+// ======================================
+
 async function sendMessage(rawMessage) {
   const message = rawMessage.trim();
+
   if (!message || busy) return;
 
+  if (synth) synth.cancel();
+
   addMessage("YOU", message, "user");
+
   input.value = "";
+
   busy = true;
+
   sendButton.disabled = true;
   input.disabled = true;
-  sendButton.textContent = "…";
-  coreSubtitle.textContent = "PROCESSING REQUEST...";
 
-  const loading = addMessage("F.R.I.D.A.Y.", "Запрос отправлен на сервер…");
+  sendButton.textContent = "...";
+
+  coreSubtitle.textContent =
+    "PROCESSING REQUEST...";
+
+  const loading = addMessage(
+    "F.R.I.D.A.Y.",
+    "Анализирую запрос..."
+  );
 
   try {
-    const response = await fetch(`${API_BASE}/chat`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify({ message })
-    });
+    const response = await fetch(
+      `${API_BASE}/chat`,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+
+        body: JSON.stringify({
+          message: message
+        })
+      }
+    );
 
     const raw = await response.text();
+
     let data;
 
     try {
-      data = raw ? JSON.parse(raw) : {};
+      data = JSON.parse(raw);
     } catch {
-      throw new Error(`Сервер вернул некорректный ответ (HTTP ${response.status}).`);
+      throw new Error(
+        `Некорректный ответ сервера: HTTP ${response.status}`
+      );
     }
 
     if (!response.ok) {
-      const detail = typeof data.detail === "string"
-        ? data.detail
-        : `Ошибка API: HTTP ${response.status}.`;
-      throw new Error(detail);
+      throw new Error(
+        data.detail || `HTTP ${response.status}`
+      );
     }
 
-    if (typeof data.reply !== "string" || !data.reply.trim()) {
-      throw new Error("API не вернул текст ответа в поле reply.");
+    if (
+      typeof data.reply !== "string" ||
+      !data.reply.trim()
+    ) {
+      throw new Error(
+        "Модель не вернула текстовый ответ."
+      );
     }
 
     loading.remove();
-    addMessage("F.R.I.D.A.Y.", data.reply);
+
+    addMessage(
+      "F.R.I.D.A.Y.",
+      data.reply
+    );
+
     setStatus(true, "СЕРВЕР ДОСТУПЕН");
-    modelStatus.textContent = "● ОТВЕТ ПОЛУЧЕН";
+
+    modelStatus.textContent =
+      "● AI ONLINE";
+
+    // Speak the AI answer automatically
+    speak(data.reply);
+
   } catch (error) {
     loading.remove();
 
-    const reason = error instanceof TypeError
-      ? "Не удалось выполнить запрос. Возможны проблемы с сетью или CORS."
-      : error.message;
+    addMessage(
+      "SYSTEM ERROR",
+      error.message,
+      "error"
+    );
 
-    addMessage("SYSTEM ERROR", reason, "error");
     setStatus(false, "ОШИБКА ЗАПРОСА");
-    modelStatus.textContent = "● НУЖНА ПРОВЕРКА";
-    chatNote.textContent =
-      "Сервер или языковая модель вернули ошибку. Проверь логи Render.";
+
+    modelStatus.textContent =
+      "● NEEDS CHECK";
   } finally {
     busy = false;
+
     sendButton.disabled = false;
     input.disabled = false;
+
     sendButton.textContent = "➤";
-    coreSubtitle.textContent = "PERSONAL AI SYSTEM";
+
+    if (!synth || !synth.speaking) {
+      coreSubtitle.textContent =
+        "PERSONAL AI SYSTEM";
+    }
+
     input.focus();
   }
 }
 
-form.addEventListener("submit", (event) => {
+
+// ======================================
+// TEXT CHAT
+// ======================================
+
+form.addEventListener("submit", event => {
   event.preventDefault();
+
   sendMessage(input.value);
 });
 
-$("clearButton").addEventListener("click", () => {
-  if (busy) return;
-  messages.replaceChildren();
-  addMessage("F.R.I.D.A.Y. · SYSTEM", "Чат очищен. Готова к новому запросу.");
-  input.focus();
-});
 
-const SpeechAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+// ======================================
+// CLEAR CHAT
+// ======================================
+
+$("clearButton").addEventListener(
+  "click",
+  () => {
+    if (busy) return;
+
+    clearHistory();
+  }
+);
+
+
+// ======================================
+// SPEECH RECOGNITION
+// ======================================
+
+const SpeechAPI =
+  window.SpeechRecognition ||
+  window.webkitSpeechRecognition;
 
 if (SpeechAPI) {
   recognition = new SpeechAPI();
+
   recognition.lang = "ru-RU";
   recognition.continuous = false;
   recognition.interimResults = false;
-  $("voiceStatus").textContent = "● ДОСТУПЕН";
+  recognition.maxAlternatives = 1;
+
+  voiceStatus.textContent =
+    "● VOICE ONLINE";
 
   recognition.onstart = () => {
     listening = true;
+
+    document.body.classList.add("listening");
+
     voiceButton.textContent = "⏹";
-    chatNote.textContent = "Слушаю… Говори в микрофон.";
-  };
 
-  recognition.onresult = (event) => {
-    const result = event.results?.[0]?.[0]?.transcript;
-    if (result) {
-      input.value = result;
-      input.focus();
-    }
-  };
+    coreSubtitle.textContent =
+      "LISTENING...";
 
-  recognition.onerror = (event) => {
-    const errors = {
-      "not-allowed": "Разреши доступ к микрофону в браузере.",
-      "no-speech": "Речь не обнаружена. Попробуй ещё раз.",
-      "network": "Ошибка сети при распознавании речи."
-    };
-    chatNote.textContent = errors[event.error] || `Ошибка микрофона: ${event.error}`;
-  };
-
-  recognition.onend = () => {
-    listening = false;
-    voiceButton.textContent = "🎙";
-  };
-
-  voiceButton.addEventListener("click", () => {
-    if (listening) {
-      recognition.stop();
-    } else {
-      try {
-        recognition.start();
-      } catch {
-        chatNote.textContent = "Не удалось запустить микрофон. Попробуй ещё раз.";
-      }
-    }
-  });
-} else {
-  voiceButton.disabled = true;
-  $("voiceStatus").textContent = "● НЕ ПОДДЕРЖИВАЕТСЯ";
-}
-
-checkServer();
-</script>
-</body>
-</html>
