@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -279,7 +280,6 @@ button{cursor:pointer}
 
 <body>
 <div class="app">
-
 <header class="topbar">
   <div class="brand">
     <div class="brand-mark">F.</div>
@@ -296,20 +296,17 @@ button{cursor:pointer}
 
 <main class="main">
 <section class="workspace">
-
 <section class="panel hero">
   <div class="hero-grid"></div>
   <div class="corner tl">CORE SYSTEM / 04</div>
   <div class="corner tr">NEURAL INTERFACE</div>
   <div class="corner bl" id="heroState">AWAITING CONNECTION</div>
-
   <div class="core-wrap">
     <div class="orbit"></div>
     <div class="orbit two"></div>
     <div class="orbit three"></div>
     <div class="core">F</div>
   </div>
-
   <div class="hero-label">
     <strong>F.R.I.D.A.Y.</strong>
     <span id="heroSubtitle">PERSONAL AI · READY TO ASSIST</span>
@@ -321,23 +318,19 @@ button{cursor:pointer}
     <div class="panel-title">NEURAL COMMUNICATION</div>
     <div class="subtle" id="chatCount">SESSION 01</div>
   </div>
-
   <div class="chat-log" id="chatLog" aria-live="polite">
     <div class="message ai">
       <span class="who">F.R.I.D.A.Y. / SYSTEM</span>
       Привет! Я F.R.I.D.A.Y. 4.0. Система готова к работе. Чем займёмся?
     </div>
   </div>
-
   <div class="typing" id="typing">F.R.I.D.A.Y. формирует ответ...</div>
-
   <form class="composer" id="chatForm">
     <button class="btn icon-btn" type="button" id="micBtn" title="Голосовой ввод">⌁</button>
     <textarea id="messageInput" rows="1" placeholder="Введите сообщение... (Enter — отправить)"></textarea>
     <button class="btn primary" id="sendBtn" type="submit">SEND ↗</button>
   </form>
 </section>
-
 </section>
 
 <aside class="side">
@@ -346,15 +339,13 @@ button{cursor:pointer}
     <div class="panel-title">SYSTEM STATUS</div>
     <span class="dot" style="color:var(--green)"></span>
   </div>
-
   <div class="status-list">
     <div class="status-row"><span>Backend API</span><b class="status-value wait" id="apiStatus">CHECKING</b></div>
     <div class="status-row"><span>AI Provider</span><b class="status-value" id="providerStatus">OpenRouter</b></div>
     <div class="status-row"><span>AI Model</span><b class="status-value" id="modelStatus">AUTO</b></div>
-    <div class="status-row"><span>Voice engine</span><b class="status-value" id="voiceStatus">AVAILABLE</b></div>
+    <div class="status-row"><span>Voice engine</span><b class="status-value wait" id="voiceStatus">CHECKING</b></div>
     <div class="status-row"><span>Interface</span><b class="status-value">v4.0</b></div>
   </div>
-
   <div class="meter"><i></i></div>
 </section>
 
@@ -379,13 +370,10 @@ button{cursor:pointer}
   <span>F.R.I.D.A.Y. 4.0 · STARK-INSPIRED INTERFACE</span>
   <span id="footerStatus">API LINK: VERIFYING</span>
 </footer>
-
 </div>
 
 <script>
-// Действующий backend OpenRouter
 const API_BASE = "https://friday-ai-backend-gfc4.onrender.com";
-
 const HEALTH_TIMEOUT_MS = 20000;
 const CHAT_TIMEOUT_MS = 90000;
 
@@ -395,6 +383,8 @@ const input = $("messageInput");
 
 let busy = false;
 let sessionMessages = 0;
+let currentAudio = null;
+let currentAudioUrl = null;
 
 function setStatus(text, kind = "ok") {
   $("apiStatus").textContent = text;
@@ -420,7 +410,6 @@ function setStatus(text, kind = "ok") {
 async function fetchWithTimeout(url, options = {}, timeout = 15000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
-
   try {
     return await fetch(url, {
       ...options,
@@ -434,37 +423,29 @@ async function fetchWithTimeout(url, options = {}, timeout = 15000) {
 
 async function checkServer() {
   setStatus("CHECKING", "wait");
-
   try {
     const response = await fetchWithTimeout(
-      API_BASE + "/health",
-      {},
-      HEALTH_TIMEOUT_MS
+      API_BASE + "/health", {}, HEALTH_TIMEOUT_MS
     );
-
     const raw = await response.text();
     let data;
-
     try {
       data = JSON.parse(raw);
     } catch {
       throw new Error("Сервер вернул не JSON. HTTP " + response.status);
     }
-
     if (!response.ok || data.ok !== true) {
       throw new Error("Health check не пройден. HTTP " + response.status);
     }
-
     setStatus("CONNECTED", "ok");
-
     if (data.provider) $("providerStatus").textContent = data.provider;
     if (data.model) $("modelStatus").textContent = data.model;
-
+    $("voiceStatus").textContent = "TTS ENDPOINT READY";
+    $("voiceStatus").className = "status-value";
   } catch (error) {
-    setStatus(
-      error.name === "AbortError" ? "TIMEOUT" : "UNAVAILABLE",
-      "error"
-    );
+    setStatus(error.name === "AbortError" ? "TIMEOUT" : "UNAVAILABLE", "error");
+    $("voiceStatus").textContent = "CHECK FAILED";
+    $("voiceStatus").className = "status-value wait";
     console.warn("F.R.I.D.A.Y. health check:", error);
   }
 }
@@ -493,13 +474,11 @@ function addMessage(text, who) {
 
 async function sendMessage(text) {
   const message = text.trim();
-
   if (!message || busy) return;
 
   busy = true;
   $("sendBtn").disabled = true;
   $("sendBtn").textContent = "…";
-
   addMessage(message, "user");
   input.value = "";
   $("typing").style.display = "block";
@@ -520,37 +499,27 @@ async function sendMessage(text) {
 
     const raw = await response.text();
     let data;
-
     try {
       data = JSON.parse(raw);
     } catch {
-      throw new Error(
-        "Некорректный ответ API (HTTP " + response.status + ")."
-      );
+      throw new Error("Некорректный ответ API (HTTP " + response.status + ").");
     }
 
     if (!response.ok) {
       const detail =
         data.detail || data.error || data.message || ("HTTP " + response.status);
-
       throw new Error(
         typeof detail === "string" ? detail : JSON.stringify(detail)
       );
     }
 
     if (typeof data.reply !== "string" || !data.reply.trim()) {
-      throw new Error("API не вернул текст ответа.");
+      throw new Error("API не вернул текстовый ответ.");
     }
 
     addMessage(data.reply.trim(), "ai");
-
-    if (data.provider) {
-      $("providerStatus").textContent = data.provider;
-    }
-
-    if (data.model) {
-      $("modelStatus").textContent = data.model;
-    }
+    if (data.provider) $("providerStatus").textContent = data.provider;
+    if (data.model) $("modelStatus").textContent = data.model;
 
     setStatus("CONNECTED", "ok");
     speak(data.reply.trim());
@@ -575,92 +544,100 @@ async function sendMessage(text) {
   }
 }
 
-function speak(text) {
-  if (!("speechSynthesis" in window)) return;
+// Облачная озвучка /tts с резервным голосом браузера.
+async function speak(text) {
+  if (!text) return;
+
+  stopSpeaking();
+
+  $("voiceStatus").textContent = "CLOUD VOICE";
+  $("voiceStatus").className = "status-value wait";
+
+  try {
+    const response = await fetchWithTimeout(
+      API_BASE + "/tts",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "audio/mpeg"
+        },
+        body: JSON.stringify({ message: text })
+      },
+      60000
+    );
+
+    if (!response.ok) {
+      throw new Error("TTS HTTP " + response.status);
+    }
+
+    const audioBlob = await response.blob();
+    if (!audioBlob.size) {
+      throw new Error("Пустой аудиофайл");
+    }
+
+    currentAudioUrl = URL.createObjectURL(audioBlob);
+    currentAudio = new Audio(currentAudioUrl);
+
+    currentAudio.onended = () => {
+      cleanupAudio();
+      $("voiceStatus").textContent = "CLOUD READY";
+      $("voiceStatus").className = "status-value";
+    };
+
+    currentAudio.onerror = () => {
+      cleanupAudio();
+      browserVoice(text);
+    };
+
+    await currentAudio.play();
+
+  } catch (error) {
+    console.warn("Cloud voice unavailable:", error);
+    cleanupAudio();
+    browserVoice(text);
+  }
+}
+
+function cleanupAudio() {
+  if (currentAudio) {
+    currentAudio.onended = null;
+    currentAudio.onerror = null;
+    currentAudio.pause();
+    currentAudio = null;
+  }
+
+  if (currentAudioUrl) {
+    URL.revokeObjectURL(currentAudioUrl);
+    currentAudioUrl = null;
+  }
+}
+
+function stopSpeaking() {
+  cleanupAudio();
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+}
+
+function browserVoice(text) {
+  if (!("speechSynthesis" in window)) {
+    $("voiceStatus").textContent = "UNAVAILABLE";
+    $("voiceStatus").className = "status-value error";
+    return;
+  }
 
   window.speechSynthesis.cancel();
 
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "ru-RU";
-  utterance.rate = 1;
-  utterance.pitch = 1;
+  utterance.rate = 0.92;
+  utterance.pitch = 0.85;
 
-  window.speechSynthesis.speak(utterance);
-}
-
-$("chatForm").addEventListener("submit", event => {
-  event.preventDefault();
-  sendMessage(input.value);
-});
-
-input.addEventListener("keydown", event => {
-  if (event.key === "Enter" && !event.shiftKey) {
-    event.preventDefault();
-    sendMessage(input.value);
-  }
-});
-
-document.querySelectorAll("[data-prompt]").forEach(button => {
-  button.addEventListener("click", () => {
-    sendMessage(button.dataset.prompt);
-  });
-});
-
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
-
-if (SpeechRecognition) {
-  const recognition = new SpeechRecognition();
-
-  recognition.lang = "ru-RU";
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
-
-  recognition.onstart = () => {
-    $("micBtn").textContent = "●";
-    $("heroSubtitle").textContent = "LISTENING...";
+  utterance.onstart = () => {
+    $("voiceStatus").textContent = "BROWSER FALLBACK";
+    $("voiceStatus").className = "status-value wait";
   };
 
-  recognition.onend = () => {
-    $("micBtn").textContent = "⌁";
-    $("heroSubtitle").textContent = "PERSONAL AI · READY TO ASSIST";
-  };
-
-  recognition.onerror = () => {
-    $("micBtn").textContent = "⌁";
-  };
-
-  recognition.onresult = event => {
-    const transcript = event.results[0][0].transcript;
-    input.value = transcript;
-    sendMessage(transcript);
-  };
-
-  $("micBtn").addEventListener("click", () => {
-    try {
-      recognition.start();
-    } catch (error) {
-      console.warn(error);
-    }
-  });
-
-} else {
-  $("micBtn").disabled = true;
-  $("micBtn").title = "Голосовой ввод не поддерживается этим браузером";
-  $("voiceStatus").textContent = "NOT SUPPORTED";
-  $("voiceStatus").className = "status-value wait";
-}
-
-function updateClock() {
-  $("clock").textContent = new Date().toLocaleTimeString(
-    "ru-RU",
-    { hour12: false }
-  );
-}
-
-updateClock();
-setInterval(updateClock, 1000);
-checkServer();
-</script>
-</body>
-</html>
+  utterance.onend = () => {
+    $("voiceStatus").textContent = "BROWSER READY";
