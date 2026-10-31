@@ -1,1086 +1,666 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#050b12">
-<title>F.R.I.D.A.Y. — Personal AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050b16">
+<title>F.R.I.D.A.Y. 4.0 — AI Interface</title>
 
 <style>
-:root{
-  --bg:#050b12;
-  --panel:rgba(8,22,34,.94);
-  --cyan:#00eaff;
-  --blue:#008cff;
-  --text:#d9faff;
-  --muted:#7197a6;
-  --border:rgba(0,234,255,.24);
-  --red:#ff637c;
-  --green:#42ffb0;
+:root {
+  --bg:#050b16;
+  --line:rgba(77,190,255,.22);
+  --cyan:#54d9ff;
+  --blue:#398dff;
+  --text:#e8f7ff;
+  --muted:#7f9bb5;
+  --green:#54f0b0;
+  --red:#ff7185;
 }
-
 *{box-sizing:border-box}
-
+html,body{
+  margin:0;min-height:100%;background:var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif
+}
 body{
-  margin:0;
   min-height:100vh;
   background:
-    radial-gradient(ellipse at 50% 35%,#0b2639,transparent 48%),
-    linear-gradient(135deg,#03070d,#071421 60%,#02060b);
-  color:var(--text);
-  font-family:Segoe UI,Arial,sans-serif;
+  radial-gradient(ellipse at 50% 35%,rgba(19,94,163,.22),transparent 45%),
+  radial-gradient(ellipse at 10% 90%,rgba(0,205,255,.08),transparent 35%),
+  linear-gradient(145deg,#071120,#030812 55%,#071426);
+  overflow-x:hidden
 }
-
 body:before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  opacity:.15;
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.17;
   background-image:
-    linear-gradient(rgba(0,234,255,.15) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,234,255,.15) 1px,transparent 1px);
-  background-size:35px 35px;
+  linear-gradient(rgba(75,170,230,.13) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(75,170,230,.13) 1px,transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom,black,transparent 92%)
 }
-
-button,input{font:inherit}
+button,textarea{font:inherit}
 button{cursor:pointer}
-
-header{
-  position:relative;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  padding:18px 4%;
-  border-bottom:1px solid var(--border);
-  background:#020910d9;
+.app{
+  position:relative;z-index:1;min-height:100vh;
+  display:flex;flex-direction:column;
+  max-width:1700px;margin:auto;padding:18px 24px 20px
 }
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;padding:7px 2px 18px;border-bottom:1px solid var(--line)
 }
-
-.brand-icon{
-  width:42px;
-  height:42px;
-  border:1px solid var(--cyan);
-  color:var(--cyan);
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  font-size:24px;
-  box-shadow:0 0 20px #00eaff30;
+.brand{display:flex;align-items:center;gap:13px;min-width:0}
+.brand-mark{
+  width:43px;height:43px;border:1px solid rgba(84,217,255,.65);
+  border-radius:13px;display:grid;place-items:center;color:var(--cyan);
+  font-weight:800;letter-spacing:-2px;
+  box-shadow:0 0 22px rgba(84,217,255,.16),inset 0 0 18px rgba(84,217,255,.08)
 }
-
-.brand h1{
-  margin:0;
-  font-size:20px;
-  letter-spacing:4px;
-}
-
+.brand h1{font-size:17px;letter-spacing:.19em;margin:0;font-weight:750}
 .brand small{
-  display:block;
-  margin-top:4px;
-  font-size:9px;
-  letter-spacing:2px;
-  color:var(--muted);
+  display:block;color:var(--muted);letter-spacing:.17em;
+  font-size:9px;margin-top:4px
 }
-
-.header-right{
-  text-align:right;
-  font-size:10px;
-  color:var(--muted);
+.top-right{
+  display:flex;align-items:center;gap:18px;
+  color:var(--muted);font-size:11px;letter-spacing:.1em
 }
-
+.live{display:flex;align-items:center;gap:8px;color:var(--green)}
 .dot{
-  display:inline-block;
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:var(--green);
-  margin-right:6px;
+  width:7px;height:7px;background:currentColor;border-radius:50%;
+  box-shadow:0 0 12px currentColor
 }
-
-.dot.offline{background:var(--red)}
-
-main{
-  position:relative;
-  display:grid;
-  grid-template-columns:.8fr 1fr 1.35fr;
-  gap:18px;
-  width:min(1500px,100%);
-  margin:auto;
-  padding:25px 4%;
+.clock{font-variant-numeric:tabular-nums}
+.main{
+  display:grid;grid-template-columns:minmax(0,1fr) 310px;
+  gap:18px;flex:1;padding-top:18px;min-height:0
 }
-
+.workspace{
+  display:grid;grid-template-rows:minmax(300px,42vh) minmax(260px,1fr);
+  gap:18px;min-height:0
+}
 .panel{
-  min-width:0;
-  border:1px solid var(--border);
-  background:var(--panel);
-  border-radius:5px;
+  background:linear-gradient(145deg,rgba(13,31,54,.82),rgba(5,15,29,.83));
+  border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 0 32px rgba(36,164,255,.12);
+  backdrop-filter:blur(14px);min-width:0
 }
-
-.panel-title{
-  padding:15px;
-  border-bottom:1px solid var(--border);
-  font-size:10px;
-  letter-spacing:2px;
-  color:var(--cyan);
+.hero{position:relative;overflow:hidden;display:grid;place-items:center}
+.hero:before{
+  content:"";position:absolute;width:560px;height:560px;border-radius:50%;
+  border:1px solid rgba(64,183,255,.08);
+  box-shadow:0 0 0 35px rgba(64,183,255,.025),0 0 0 75px rgba(64,183,255,.018)
 }
-
-.left-content{padding:14px}
-
-.module{
-  padding:13px;
-  margin-bottom:12px;
-  border:1px solid #00eaff25;
-  background:#00eaff05;
+.hero-grid{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(18,119,193,.13),transparent 55%)
 }
-
-.module-name{
-  font-size:12px;
-  letter-spacing:1px;
+.core-wrap{
+  position:relative;width:min(270px,54vw);aspect-ratio:1;
+  display:grid;place-items:center
 }
-
-.module-description{
-  font-size:10px;
-  color:var(--muted);
-  margin-top:7px;
-  line-height:1.6;
+.orbit{
+  position:absolute;inset:5%;border:1px solid rgba(74,196,255,.36);
+  border-radius:50%;animation:spin 22s linear infinite
 }
-
-.module-status{
-  font-size:9px;
-  color:var(--green);
-  margin-top:10px;
+.orbit:before,.orbit:after{
+  content:"";position:absolute;width:9px;height:9px;border-radius:50%;
+  background:var(--cyan);box-shadow:0 0 16px var(--cyan);top:13%;left:17%
 }
-
-.center{
-  min-height:400px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:20px 10px;
+.orbit:after{
+  width:5px;height:5px;top:auto;left:auto;bottom:8%;right:22%;
+  background:var(--blue)
 }
-
+.orbit.two{
+  inset:15%;border-style:dashed;border-color:rgba(57,141,255,.45);
+  animation:spin 16s linear infinite reverse
+}
+.orbit.three{
+  inset:25%;border-color:rgba(84,217,255,.18);
+  animation-duration:28s
+}
 .core{
-  width:min(210px,60vw);
-  aspect-ratio:1;
-  border:1px solid #00eaffaa;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  position:relative;
-  box-shadow:
-    0 0 28px #00eaff25,
-    inset 0 0 35px #008cff22;
-  animation:pulse 4s ease-in-out infinite;
+  width:44%;aspect-ratio:1;border-radius:50%;display:grid;
+  place-items:center;color:#dffaff;font-size:clamp(25px,4vw,42px);
+  font-weight:300;letter-spacing:-.08em;
+  background:radial-gradient(circle at 35% 30%,#5be5ff 0%,#187db9 28%,#092b52 60%,#061426 76%);
+  border:1px solid rgba(115,226,255,.8);
+  box-shadow:0 0 25px rgba(61,202,255,.6),0 0 75px rgba(32,138,255,.3),inset 0 0 26px rgba(143,238,255,.35);
+  animation:pulse 3s ease-in-out infinite
 }
-
-.core:before,.core:after{
-  content:"";
-  position:absolute;
-  inset:13px;
-  border:1px dashed #00eaff80;
-  border-radius:50%;
-  animation:spin 18s linear infinite;
+.hero-label{position:absolute;bottom:24px;text-align:center}
+.hero-label strong{
+  display:block;font-size:13px;letter-spacing:.32em;color:var(--cyan)
 }
-
-.core:after{
-  inset:-12px;
-  border-style:solid;
-  border-color:#008cff55;
-  border-left-color:transparent;
-  border-right-color:transparent;
-  animation-duration:12s;
-  animation-direction:reverse;
+.hero-label span{
+  display:block;margin-top:7px;font-size:10px;
+  color:var(--muted);letter-spacing:.16em
 }
-
-.core-inner{
-  width:58%;
-  aspect-ratio:1;
-  border-radius:50%;
-  background:
-    radial-gradient(circle,#caffff,#00bfff 25%,#064e86 58%,transparent 72%);
-  filter:drop-shadow(0 0 16px var(--cyan));
+.corner{
+  position:absolute;color:rgba(108,190,235,.58);
+  font-size:9px;letter-spacing:.15em
 }
-
-@keyframes spin{
-  to{transform:rotate(360deg)}
+.corner.tl{top:18px;left:20px}
+.corner.tr{top:18px;right:20px}
+.corner.bl{bottom:18px;left:20px}
+.chat-panel{display:flex;flex-direction:column;overflow:hidden}
+.panel-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:15px 18px;border-bottom:1px solid var(--line)
 }
-
-@keyframes pulse{
-  50%{transform:scale(1.035)}
+.panel-title{font-size:11px;letter-spacing:.19em;color:#bcecff;font-weight:700}
+.subtle{color:var(--muted);font-size:10px;letter-spacing:.08em}
+.chat-log{
+  flex:1;overflow-y:auto;padding:17px 18px;
+  display:flex;flex-direction:column;gap:13px;min-height:130px
 }
-
-.core-label{
-  margin-top:30px;
-  font-size:16px;
-  letter-spacing:4px;
-}
-
-.core-subtitle{
-  margin-top:10px;
-  font-size:10px;
-  letter-spacing:2px;
-  color:var(--muted);
-}
-
-.equalizer{
-  display:flex;
-  gap:4px;
-  height:22px;
-  align-items:center;
-  margin-top:22px;
-}
-
-.equalizer span{
-  width:3px;
-  height:6px;
-  background:var(--cyan);
-  animation:wave .8s ease-in-out infinite alternate;
-}
-
-.equalizer span:nth-child(2n){animation-delay:.2s}
-.equalizer span:nth-child(3n){animation-delay:.4s}
-
-@keyframes wave{
-  to{height:21px}
-}
-
-body.listening .core,
-body.speaking .core{
-  box-shadow:
-    0 0 50px #00eaff80,
-    inset 0 0 45px #008cff55;
-  animation:pulse .8s ease-in-out infinite;
-}
-
-.chat-panel{
-  display:flex;
-  flex-direction:column;
-  height:min(700px,calc(100vh - 135px));
-  min-height:500px;
-}
-
-.chat-heading{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:8px;
-}
-
-.clear-button{
-  background:transparent;
-  border:1px solid var(--border);
-  color:var(--muted);
-  padding:7px;
-  font-size:10px;
-}
-
-.messages{
-  flex:1;
-  min-height:200px;
-  overflow-y:auto;
-  padding:14px;
-  display:flex;
-  flex-direction:column;
-  gap:13px;
-}
-
 .message{
-  max-width:95%;
-  align-self:flex-start;
-  border:1px solid var(--border);
-  background:#00eaff08;
-  padding:12px;
-  border-radius:4px;
-  overflow-wrap:anywhere;
+  max-width:88%;padding:11px 14px;border-radius:12px;
+  font-size:13px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere
 }
-
+.message.ai{
+  align-self:flex-start;background:rgba(31,93,139,.22);
+  border:1px solid rgba(84,217,255,.2)
+}
 .message.user{
-  align-self:flex-end;
-  border-color:#008cff80;
-  background:#008cff18;
+  align-self:flex-end;background:rgba(42,111,205,.2);
+  border:1px solid rgba(69,153,255,.3)
 }
-
-.message.error{border-color:#ff637c99}
-
-.message-label{
-  font-size:9px;
-  letter-spacing:1px;
-  color:var(--cyan);
-  margin-bottom:7px;
+.message .who{
+  display:block;color:var(--cyan);font-size:9px;
+  letter-spacing:.16em;margin-bottom:5px
 }
-
-.message.user .message-label{color:#6ab9ff}
-.message.error .message-label{color:var(--red)}
-
-.message-text{
-  font-size:13px;
-  line-height:1.65;
-  white-space:pre-wrap;
+.composer{
+  display:flex;gap:10px;padding:13px;border-top:1px solid var(--line)
 }
-
-.chat-form{
-  border-top:1px solid var(--border);
-  padding:12px;
+.composer textarea{
+  flex:1;min-width:0;resize:none;min-height:45px;max-height:120px;
+  border:1px solid rgba(82,173,225,.25);border-radius:11px;
+  background:rgba(2,10,21,.7);color:var(--text);
+  padding:12px 13px;outline:none;font-size:13px
 }
-
-.input-row{
-  display:flex;
-  gap:7px;
+.composer textarea:focus{
+  border-color:rgba(84,217,255,.7);
+  box-shadow:0 0 0 3px rgba(84,217,255,.07)
 }
-
-#messageInput{
-  min-width:0;
-  flex:1;
-  background:#0005;
-  color:var(--text);
-  border:1px solid var(--border);
-  padding:12px;
-  outline:none;
-  border-radius:3px;
+.btn{
+  border:1px solid rgba(84,217,255,.35);color:var(--cyan);
+  background:rgba(22,91,139,.18);border-radius:11px;
+  padding:0 15px;font-size:11px;letter-spacing:.1em;transition:.2s
 }
-
-#messageInput:focus{border-color:var(--cyan)}
-
-.action-button{
-  min-width:43px;
-  padding:9px;
-  background:#00eaff10;
-  border:1px solid var(--cyan);
-  color:var(--cyan);
-  border-radius:3px;
+.btn:hover{
+  background:rgba(37,139,196,.3);
+  box-shadow:0 0 18px rgba(84,217,255,.13)
 }
-
-.action-button:disabled{
-  opacity:.4;
-  cursor:not-allowed;
+.btn.primary{
+  background:linear-gradient(135deg,#137db4,#1453a2);
+  color:white;border-color:rgba(105,222,255,.65);min-width:82px
 }
-
-.bottom-note{
-  margin-top:10px;
-  color:var(--muted);
-  font-size:9px;
-  line-height:1.6;
-  overflow-wrap:anywhere;
+.btn.icon-btn{min-width:45px;padding:0 12px;font-size:16px}
+.side{display:flex;flex-direction:column;gap:18px}
+.status-panel{padding:17px}
+.status-head{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:18px
 }
-
-footer{
-  position:relative;
-  text-align:center;
-  padding:15px;
-  border-top:1px solid var(--border);
-  color:#557685;
-  font-size:9px;
-  letter-spacing:1px;
+.status-list{display:flex;flex-direction:column;gap:15px}
+.status-row{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;font-size:11px
 }
-
-@media(max-width:950px){
-  main{grid-template-columns:1fr 1.3fr}
-  .left-panel{display:none}
-  .center{min-height:350px}
+.status-row span:first-child{color:var(--muted)}
+.status-value{color:var(--green);text-align:right}
+.status-value.wait{color:#ffd27a}
+.status-value.error{color:var(--red)}
+.meter{
+  height:4px;background:rgba(95,156,193,.13);
+  border-radius:8px;margin-top:8px;overflow:hidden
 }
-
-@media(max-width:620px){
-  header{padding:14px 4%}
-  .brand h1{font-size:17px;letter-spacing:3px}
-  .brand small{font-size:8px;letter-spacing:1px}
-  main{
-    display:flex;
-    flex-direction:column;
-    padding:14px 4%;
-    gap:14px;
-  }
-  .center{min-height:290px}
-  .core{width:145px}
-  .core-label{margin-top:24px}
-  .chat-panel{height:520px;min-height:450px}
+.meter i{
+  display:block;width:72%;height:100%;
+  background:linear-gradient(90deg,#1687c6,#5de5ff);
+  box-shadow:0 0 10px var(--cyan)
+}
+.quick-panel{padding:17px}
+.quick-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px
+}
+.quick{
+  min-height:66px;border:1px solid rgba(77,190,255,.18);
+  background:rgba(12,39,66,.45);border-radius:11px;
+  color:#bdeaff;text-align:left;padding:11px;font-size:10px;
+  letter-spacing:.08em
+}
+.quick b{
+  display:block;font-size:17px;color:var(--cyan);
+  margin-bottom:5px;font-weight:500
+}
+.quick:hover{
+  border-color:rgba(84,217,255,.6);
+  background:rgba(22,87,129,.35)
+}
+.system-note{
+  color:var(--muted);font-size:10px;line-height:1.6;
+  margin-top:auto;padding:0 4px
+}
+.footer{
+  display:flex;justify-content:space-between;gap:12px;
+  color:#58758f;font-size:9px;letter-spacing:.13em;padding:15px 2px 0
+}
+.typing{color:var(--cyan);font-size:11px;padding:0 18px 10px;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{
+  0%,100%{transform:scale(.96);filter:brightness(.92)}
+  50%{transform:scale(1.04);filter:brightness(1.18)}
+}
+@media(max-width:900px){
+  .app{padding:12px}
+  .main{grid-template-columns:1fr}
+  .workspace{grid-template-rows:300px minmax(360px,1fr)}
+  .side{display:grid;grid-template-columns:1fr 1fr}
+  .system-note{grid-column:1/-1}
+  .top-right .clock{display:none}
+}
+@media(max-width:560px){
+  .topbar{align-items:flex-start}
+  .brand h1{font-size:14px}
+  .top-right{font-size:9px}
+  .workspace{grid-template-rows:270px minmax(390px,1fr);gap:12px}
+  .main{gap:12px;padding-top:12px}
+  .side{grid-template-columns:1fr;gap:12px}
+  .message{max-width:96%}
+  .composer{gap:7px;padding:9px}
+  .btn.primary{min-width:65px;padding:0 10px}
+  .hero-label{bottom:17px}
+  .footer{font-size:8px}
 }
 </style>
 </head>
 
 <body>
+<div class="app">
 
-<header>
+<header class="topbar">
   <div class="brand">
-    <div class="brand-icon">F</div>
+    <div class="brand-mark">F.</div>
     <div>
       <h1>F.R.I.D.A.Y.</h1>
-      <small>STARK INDUSTRIES · PERSONAL AI</small>
+      <small>PERSONAL AI SYSTEM · VERSION 4.0</small>
     </div>
   </div>
-
-  <div class="header-right">
-    <div>
-      <span class="dot offline" id="statusDot"></span>
-      <span id="connectionStatus">ПОДКЛЮЧЕНИЕ...</span>
-    </div>
-    <div style="margin-top:7px">INTERFACE v3.2</div>
+  <div class="top-right">
+    <div class="live"><i class="dot"></i><span id="topStatus">INITIALIZING</span></div>
+    <span class="clock" id="clock">--:--:--</span>
   </div>
 </header>
 
-<main>
+<main class="main">
+<section class="workspace">
 
-<section class="panel left-panel">
-  <div class="panel-title">СИСТЕМНЫЕ МОДУЛИ</div>
+<section class="panel hero">
+  <div class="hero-grid"></div>
+  <div class="corner tl">CORE SYSTEM / 04</div>
+  <div class="corner tr">NEURAL INTERFACE</div>
+  <div class="corner bl" id="heroState">AWAITING CONNECTION</div>
 
-  <div class="left-content">
-
-    <div class="module">
-      <div class="module-name">F.R.I.D.A.Y. CORE</div>
-      <div class="module-description">Главный ИИ-помощник</div>
-      <div class="module-status">● ONLINE</div>
-    </div>
-
-    <div class="module">
-      <div class="module-name">QADAM AI</div>
-      <div class="module-description">Бизнес-проект и экосистема</div>
-      <div class="module-status">● CONNECTED</div>
-    </div>
-
-    <div class="module">
-      <div class="module-name">NEURAL NETWORK</div>
-      <div class="module-description">OpenRouter Python API</div>
-      <div class="module-status" id="modelStatus">● ОЖИДАНИЕ</div>
-    </div>
-
-    <div class="module">
-      <div class="module-name">VOICE INPUT</div>
-      <div class="module-description">Распознавание речи</div>
-      <div class="module-status" id="voiceStatus">● ПРОВЕРКА</div>
-    </div>
-
-    <div class="module">
-      <div class="module-name">VOICE OUTPUT</div>
-      <div class="module-description">Cinematic voice system</div>
-      <div class="module-status" id="speechStatus">● ПРОВЕРКА</div>
-    </div>
-
-    <div class="module">
-      <div class="module-name">MEMORY</div>
-      <div class="module-description">Локальная история сообщений</div>
-      <div class="module-status" id="memoryStatus">● LOCAL</div>
-    </div>
-
-  </div>
-</section>
-
-<section class="panel center">
-  <div class="core">
-    <div class="core-inner"></div>
+  <div class="core-wrap">
+    <div class="orbit"></div>
+    <div class="orbit two"></div>
+    <div class="orbit three"></div>
+    <div class="core">F</div>
   </div>
 
-  <div class="core-label">F.R.I.D.A.Y.</div>
-  <div class="core-subtitle" id="coreSubtitle">PERSONAL AI SYSTEM</div>
-
-  <div class="equalizer" aria-hidden="true">
-    <span></span><span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span><span></span>
+  <div class="hero-label">
+    <strong>F.R.I.D.A.Y.</strong>
+    <span id="heroSubtitle">PERSONAL AI · READY TO ASSIST</span>
   </div>
 </section>
 
 <section class="panel chat-panel">
-
-  <div class="panel-title chat-heading">
-    <span>НЕЙРОННЫЙ ИНТЕРФЕЙС</span>
-    <button type="button" class="clear-button" id="clearButton">
-      ОЧИСТИТЬ
-    </button>
+  <div class="panel-head">
+    <div class="panel-title">NEURAL COMMUNICATION</div>
+    <div class="subtle" id="chatCount">SESSION 01</div>
   </div>
 
-  <div class="messages" id="messages" aria-live="polite"></div>
-
-  <form class="chat-form" id="chatForm">
-    <div class="input-row">
-
-      <input
-        id="messageInput"
-        type="text"
-        placeholder="Введите сообщение..."
-        autocomplete="off"
-        maxlength="4000"
-        required
-        aria-label="Сообщение"
-      >
-
-      <button
-        class="action-button"
-        type="button"
-        id="voiceButton"
-        title="Голосовой ввод"
-        aria-label="Голосовой ввод"
-      >🎙</button>
-
-      <button
-        class="action-button"
-        type="button"
-        id="speechButton"
-        title="Голосовые ответы"
-        aria-label="Голосовые ответы"
-      >🔊</button>
-
-      <button
-        class="action-button"
-        type="submit"
-        id="sendButton"
-        aria-label="Отправить"
-      >➤</button>
-
+  <div class="chat-log" id="chatLog" aria-live="polite">
+    <div class="message ai">
+      <span class="who">F.R.I.D.A.Y. / SYSTEM</span>
+      Привет! Я F.R.I.D.A.Y. 4.0. Система готова к работе. Чем займёмся?
     </div>
+  </div>
 
-    <div class="bottom-note" id="chatNote">
-      Запуск системы...
-    </div>
+  <div class="typing" id="typing">F.R.I.D.A.Y. формирует ответ...</div>
+
+  <form class="composer" id="chatForm">
+    <button class="btn icon-btn" type="button" id="micBtn" title="Голосовой ввод">⌁</button>
+    <textarea id="messageInput" rows="1" placeholder="Введите сообщение... (Enter — отправить)"></textarea>
+    <button class="btn primary" id="sendBtn" type="submit">SEND ↗</button>
   </form>
+</section>
 
 </section>
+
+<aside class="side">
+<section class="panel status-panel">
+  <div class="status-head">
+    <div class="panel-title">SYSTEM STATUS</div>
+    <span class="dot" style="color:var(--green)"></span>
+  </div>
+
+  <div class="status-list">
+    <div class="status-row"><span>Backend API</span><b class="status-value wait" id="apiStatus">CHECKING</b></div>
+    <div class="status-row"><span>AI Provider</span><b class="status-value" id="providerStatus">OpenRouter</b></div>
+    <div class="status-row"><span>AI Model</span><b class="status-value" id="modelStatus">AUTO</b></div>
+    <div class="status-row"><span>Voice engine</span><b class="status-value" id="voiceStatus">AVAILABLE</b></div>
+    <div class="status-row"><span>Interface</span><b class="status-value">v4.0</b></div>
+  </div>
+
+  <div class="meter"><i></i></div>
+</section>
+
+<section class="panel quick-panel">
+  <div class="panel-title">QUICK COMMANDS</div>
+  <div class="quick-grid">
+    <button class="quick" type="button" data-prompt="Расскажи, что ты умеешь."><b>✧</b>ВОЗМОЖНОСТИ</button>
+    <button class="quick" type="button" data-prompt="Помоги составить план на сегодня."><b>◷</b>ПЛАНИРОВАНИЕ</button>
+    <button class="quick" type="button" data-prompt="Объясни сложную тему простыми словами."><b>⌘</b>ОБУЧЕНИЕ</button>
+    <button class="quick" type="button" data-prompt="Предложи идеи для моего проекта."><b>◇</b>ИДЕИ</button>
+  </div>
+</section>
+
+<div class="system-note">
+  <div style="color:#8fb8d4;letter-spacing:.15em;margin-bottom:5px">SECURE CONNECTION</div>
+  Сообщения отправляются на подключённый F.R.I.D.A.Y. API. Не вводите пароли и другие секретные данные.
+</div>
+</aside>
 </main>
 
-<footer>
-  F.R.I.D.A.Y. PERSONAL AI · PROJECT QADAM AI · VERSION 3.2
+<footer class="footer">
+  <span>F.R.I.D.A.Y. 4.0 · STARK-INSPIRED INTERFACE</span>
+  <span id="footerStatus">API LINK: VERIFYING</span>
 </footer>
 
+</div>
+
 <script>
-"use strict";
-
-/* ==============================
-   API CONFIGURATION
-============================== */
-
+// Действующий backend OpenRouter
 const API_BASE = "https://friday-ai-backend-gfc4.onrender.com";
-
-const STORAGE_KEY = "friday_chat_history_v3";
-const VOICE_KEY = "friday_voice_enabled";
 
 const HEALTH_TIMEOUT_MS = 20000;
 const CHAT_TIMEOUT_MS = 90000;
 
 const $ = id => document.getElementById(id);
-
-/* ==============================
-   ELEMENTS
-============================== */
-
-const messages = $("messages");
-const form = $("chatForm");
+const chatLog = $("chatLog");
 const input = $("messageInput");
 
-const sendButton = $("sendButton");
-const voiceButton = $("voiceButton");
-const speechButton = $("speechButton");
-
-const statusDot = $("statusDot");
-const connectionStatus = $("connectionStatus");
-
-const modelStatus = $("modelStatus");
-const voiceStatus = $("voiceStatus");
-const speechStatus = $("speechStatus");
-const memoryStatus = $("memoryStatus");
-
-const coreSubtitle = $("coreSubtitle");
-const chatNote = $("chatNote");
-
-/* ==============================
-   STATE
-============================== */
-
 let busy = false;
-let recognition = null;
-let listening = false;
+let sessionMessages = 0;
 
-let voiceEnabled =
-  localStorage.getItem(VOICE_KEY) !== "false";
+function setStatus(text, kind = "ok") {
+  $("apiStatus").textContent = text;
+  $("apiStatus").className = "status-value " +
+    (kind === "error" ? "error" : kind === "wait" ? "wait" : "");
 
-const synth =
-  "speechSynthesis" in window
-    ? window.speechSynthesis
-    : null;
+  $("topStatus").textContent =
+    kind === "error" ? "OFFLINE" :
+    kind === "wait" ? "CONNECTING" : "ONLINE";
 
-let availableVoices = [];
+  $("heroState").textContent =
+    kind === "error" ? "CONNECTION INTERRUPTED" :
+    kind === "wait" ? "ESTABLISHING LINK" : "SECURE LINK ESTABLISHED";
 
-/* ==============================
-   STATUS
-============================== */
+  $("heroSubtitle").textContent =
+    kind === "error" ? "API CONNECTION REQUIRED" :
+    kind === "wait" ? "CONNECTING TO NEURAL CORE" :
+    "PERSONAL AI · READY TO ASSIST";
 
-function setStatus(online, label) {
-  statusDot.classList.toggle("offline", !online);
-  connectionStatus.textContent = label;
+  $("footerStatus").textContent = "API LINK: " + text;
 }
 
-/* ==============================
-   CHAT HISTORY
-============================== */
-
-function addMessage(label, text, type = "assistant", save = true) {
-
-  const box = document.createElement("div");
-
-  box.className =
-    "message" +
-    (type === "user" ? " user" : "") +
-    (type === "error" ? " error" : "");
-
-  const heading = document.createElement("div");
-  heading.className = "message-label";
-  heading.textContent = label;
-
-  const content = document.createElement("div");
-  content.className = "message-text";
-  content.textContent = String(text);
-
-  box.append(heading, content);
-
-  messages.appendChild(box);
-  messages.scrollTop = messages.scrollHeight;
-
-  if (save) saveHistory();
-
-  return box;
-}
-
-function saveHistory() {
+async function fetchWithTimeout(url, options = {}, timeout = 15000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeout);
 
   try {
-
-    const history = Array.from(
-      messages.querySelectorAll(".message")
-    ).map(box => ({
-
-      label:
-        box.querySelector(".message-label")?.textContent ||
-        "F.R.I.D.A.Y.",
-
-      text:
-        box.querySelector(".message-text")?.textContent ||
-        "",
-
-      type:
-        box.classList.contains("user")
-          ? "user"
-          : box.classList.contains("error")
-            ? "error"
-            : "assistant"
-
-    }));
-
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(history.slice(-100))
-    );
-
-    memoryStatus.textContent = "● SAVED";
-
-  } catch (error) {
-
-    memoryStatus.textContent = "● STORAGE ERROR";
-
+    return await fetch(url, {
+      ...options,
+      signal: controller.signal,
+      cache: "no-store"
+    });
+  } finally {
+    clearTimeout(timer);
   }
 }
-
-function loadHistory() {
-
-  try {
-
-    const history = JSON.parse(
-      localStorage.getItem(STORAGE_KEY) || "[]"
-    );
-
-    if (Array.isArray(history)) {
-
-      history.slice(-100).forEach(item => {
-
-        if (item && typeof item.text === "string") {
-
-          addMessage(
-            item.label || "F.R.I.D.A.Y.",
-            item.text,
-            item.type || "assistant",
-            false
-          );
-
-        }
-
-      });
-
-    }
-
-  } catch (error) {
-
-    localStorage.removeItem(STORAGE_KEY);
-
-  }
-
-  if (!messages.children.length) {
-
-    addMessage(
-      "F.R.I.D.A.Y. · SYSTEM",
-      "Система запущена. Готова к работе.",
-      "assistant",
-      false
-    );
-
-  }
-
-  messages.scrollTop = messages.scrollHeight;
-
-}
-
-function clearHistory() {
-
-  messages.replaceChildren();
-
-  localStorage.removeItem(STORAGE_KEY);
-
-  if (synth) synth.cancel();
-
-  addMessage(
-    "F.R.I.D.A.Y. · SYSTEM",
-    "История очищена. Готова к новому разговору."
-  );
-
-}
-
-/* ==============================
-   VOICE OUTPUT
-============================== */
-
-function loadVoices() {
-
-  if (!synth) {
-
-    speechStatus.textContent = "● NOT SUPPORTED";
-    return;
-
-  }
-
-  availableVoices = synth.getVoices();
-
-  speechStatus.textContent =
-    availableVoices.length
-      ? "● VOICES READY"
-      : "● VOICES LOADING";
-
-}
-
-function getFridayVoice() {
-
-  const russian = availableVoices.filter(
-    voice =>
-      (voice.lang || "").toLowerCase().startsWith("ru")
-  );
-
-  return (
-    russian.find(voice =>
-      /female|woman|жен|milena|alena|katya/i.test(voice.name)
-    ) ||
-    russian[0] ||
-    null
-  );
-
-}
-
-function speak(text) {
-
-  if (!voiceEnabled || !synth || !text) return;
-
-  synth.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-
-  const voice = getFridayVoice();
-
-  utterance.lang = "ru-RU";
-  utterance.rate = 0.92;
-  utterance.pitch = 0.90;
-  utterance.volume = 1;
-
-  if (voice) utterance.voice = voice;
-
-  utterance.onstart = () => {
-
-    document.body.classList.add("speaking");
-
-    coreSubtitle.textContent = "F.R.I.D.A.Y. SPEAKING";
-
-  };
-
-  const finish = () => {
-
-    document.body.classList.remove("speaking");
-
-    if (!listening) {
-      coreSubtitle.textContent = "PERSONAL AI SYSTEM";
-    }
-
-  };
-
-  utterance.onend = finish;
-  utterance.onerror = finish;
-
-  synth.speak(utterance);
-
-}
-
-function updateSpeechButton() {
-
-  speechButton.textContent =
-    voiceEnabled ? "🔊" : "🔇";
-
-  speechButton.title =
-    voiceEnabled
-      ? "Отключить голос"
-      : "Включить голос";
-
-}
-
-speechButton.addEventListener("click", () => {
-
-  voiceEnabled = !voiceEnabled;
-
-  localStorage.setItem(
-    VOICE_KEY,
-    String(voiceEnabled)
-  );
-
-  if (!voiceEnabled && synth) synth.cancel();
-
-  updateSpeechButton();
-
-});
-
-/* ==============================
-   SERVER CONNECTION CHECK
-============================== */
 
 async function checkServer() {
-
-  const controller = new AbortController();
-
-  const timer = setTimeout(
-    () => controller.abort(),
-    HEALTH_TIMEOUT_MS
-  );
-
-  setStatus(false, "ПРОВЕРКА СОЕДИНЕНИЯ...");
-
-  chatNote.textContent =
-    "Подключаюсь к F.R.I.D.A.Y. API...";
+  setStatus("CHECKING", "wait");
 
   try {
-
-    const response = await fetch(
-      `${API_BASE}/health`,
-      {
-        method: "GET",
-        headers: {
-          "Accept": "application/json"
-        },
-        signal: controller.signal,
-        cache: "no-store"
-      }
+    const response = await fetchWithTimeout(
+      API_BASE + "/health",
+      {},
+      HEALTH_TIMEOUT_MS
     );
 
     const raw = await response.text();
-
-    if (!response.ok) {
-
-      throw new Error(
-        `HTTP ${response.status}: ${raw}`
-      );
-
-    }
-
     let data;
 
     try {
-
       data = JSON.parse(raw);
-
     } catch {
-
-      throw new Error(
-        "Сервер вернул некорректный JSON."
-      );
-
+      throw new Error("Сервер вернул не JSON. HTTP " + response.status);
     }
 
-    if (data.ok !== true) {
-
-      throw new Error(
-        "Backend ответил, но статус ok не подтверждён."
-      );
-
+    if (!response.ok || data.ok !== true) {
+      throw new Error("Health check не пройден. HTTP " + response.status);
     }
 
-    setStatus(true, "СЕРВЕР ДОСТУПЕН");
+    setStatus("CONNECTED", "ok");
 
-    modelStatus.textContent =
-      `● ${data.provider || "BACKEND ONLINE"}`;
-
-    chatNote.textContent =
-      `F.R.I.D.A.Y. готова к работе · ${data.model || "AI ONLINE"}`;
-
-    coreSubtitle.textContent = "PERSONAL AI SYSTEM";
-
-    console.log("FRIDAY HEALTH:", data);
-
-    return true;
+    if (data.provider) $("providerStatus").textContent = data.provider;
+    if (data.model) $("modelStatus").textContent = data.model;
 
   } catch (error) {
-
-    console.error("FRIDAY CONNECTION ERROR:", error);
-
-    setStatus(false, "ОШИБКА СОЕДИНЕНИЯ");
-
-    modelStatus.textContent = "● CONNECTION ERROR";
-
-    if (error.name === "AbortError") {
-
-      chatNote.textContent =
-        "Превышено время ожидания сервера (20 секунд).";
-
-    } else if (
-      error instanceof TypeError ||
-      /failed to fetch/i.test(error.message)
-    ) {
-
-      chatNote.textContent =
-        "Ошибка сети или CORS. Подробности в консоли браузера.";
-
-    } else {
-
-      chatNote.textContent =
-        `Ошибка: ${error.message}`;
-
-    }
-
-    return false;
-
-  } finally {
-
-    clearTimeout(timer);
-
+    setStatus(
+      error.name === "AbortError" ? "TIMEOUT" : "UNAVAILABLE",
+      "error"
+    );
+    console.warn("F.R.I.D.A.Y. health check:", error);
   }
-
 }
 
-/* ==============================
-   SEND MESSAGE
-============================== */
+function addMessage(text, who) {
+  const bubble = document.createElement("div");
+  bubble.className = "message " + (who === "user" ? "user" : "ai");
 
-async function sendMessage(rawMessage) {
+  const label = document.createElement("span");
+  label.className = "who";
+  label.textContent = who === "user"
+    ? "YOU / COMMAND"
+    : "F.R.I.D.A.Y. / RESPONSE";
 
-  const message = rawMessage.trim();
+  const content = document.createElement("span");
+  content.textContent = text;
+
+  bubble.append(label, content);
+  chatLog.appendChild(bubble);
+  chatLog.scrollTop = chatLog.scrollHeight;
+
+  sessionMessages++;
+  $("chatCount").textContent =
+    "SESSION · " + String(sessionMessages).padStart(2, "0");
+}
+
+async function sendMessage(text) {
+  const message = text.trim();
 
   if (!message || busy) return;
 
-  if (synth) synth.cancel();
-
-  addMessage("YOU", message, "user");
-
-  input.value = "";
-
   busy = true;
+  $("sendBtn").disabled = true;
+  $("sendBtn").textContent = "…";
 
-  sendButton.disabled = true;
-  input.disabled = true;
-
-  sendButton.textContent = "...";
-
-  coreSubtitle.textContent = "PROCESSING REQUEST...";
-
-  const loading = addMessage(
-    "F.R.I.D.A.Y.",
-    "Анализирую запрос..."
-  );
-
-  const controller = new AbortController();
-
-  const timer = setTimeout(
-    () => controller.abort(),
-    CHAT_TIMEOUT_MS
-  );
+  addMessage(message, "user");
+  input.value = "";
+  $("typing").style.display = "block";
 
   try {
-
-    const response = await fetch(
-      `${API_BASE}/chat`,
+    const response = await fetchWithTimeout(
+      API_BASE + "/chat",
       {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json"
         },
-
-        body: JSON.stringify({
-          message: message
-        }),
-
-        signal: controller.signal
-
-      }
+        body: JSON.stringify({ message })
+      },
+      CHAT_TIMEOUT_MS
     );
 
     const raw = await response.text();
-
     let data;
 
     try {
-
       data = JSON.parse(raw);
-
     } catch {
-
       throw new Error(
-        `Сервер вернул не JSON (HTTP ${response.status}).`
+        "Некорректный ответ API (HTTP " + response.status + ")."
       );
-
     }
 
     if (!response.ok) {
-
       const detail =
-        typeof data.detail === "string"
-          ? data.detail
-          : `HTTP ${response.status}`;
-
-      throw new Error(detail);
-
-    }
-
-    if (
-      typeof data.reply !== "string" ||
-      !data.reply.trim()
-    ) {
+        data.detail || data.error || data.message || ("HTTP " + response.status);
 
       throw new Error(
-        "Сервер ответил, но поле reply отсутствует или пустое."
+        typeof detail === "string" ? detail : JSON.stringify(detail)
       );
-
     }
 
-    loading.remove();
+    if (typeof data.reply !== "string" || !data.reply.trim()) {
+      throw new Error("API не вернул текст ответа.");
+    }
 
-    addMessage(
-      "F.R.I.D.A.Y.",
-      data.reply
-    );
+    addMessage(data.reply.trim(), "ai");
 
-    setStatus(true, "СЕРВЕР ДОСТУПЕН");
+    if (data.provider) {
+      $("providerStatus").textContent = data.provider;
+    }
 
-    modelStatus.textContent =
-      `● ${data.provider || "AI ONLINE"}`;
+    if (data.model) {
+      $("modelStatus").textContent = data.model;
+    }
 
-    chatNote.textContent =
-      `Модель: ${data.model || "OpenRouter"}`;
+    setStatus("CONNECTED", "ok");
+    speak(data.reply.trim());
 
-   
+  } catch (error) {
+    const messageText =
+      error.name === "AbortError"
+        ? "Сервер не ответил вовремя. Попробуйте ещё раз."
+        : error instanceof TypeError
+          ? "Не удалось связаться с API. Проверьте интернет, адрес backend и настройки CORS."
+          : error.message;
+
+    addMessage("Ошибка: " + messageText, "ai");
+    console.error("F.R.I.D.A.Y. chat:", error);
+
+  } finally {
+    $("typing").style.display = "none";
+    busy = false;
+    $("sendBtn").disabled = false;
+    $("sendBtn").textContent = "SEND ↗";
+    input.focus();
+  }
+}
+
+function speak(text) {
+  if (!("speechSynthesis" in window)) return;
+
+  window.speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "ru-RU";
+  utterance.rate = 1;
+  utterance.pitch = 1;
+
+  window.speechSynthesis.speak(utterance);
+}
+
+$("chatForm").addEventListener("submit", event => {
+  event.preventDefault();
+  sendMessage(input.value);
+});
+
+input.addEventListener("keydown", event => {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    sendMessage(input.value);
+  }
+});
+
+document.querySelectorAll("[data-prompt]").forEach(button => {
+  button.addEventListener("click", () => {
+    sendMessage(button.dataset.prompt);
+  });
+});
+
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (SpeechRecognition) {
+  const recognition = new SpeechRecognition();
+
+  recognition.lang = "ru-RU";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = () => {
+    $("micBtn").textContent = "●";
+    $("heroSubtitle").textContent = "LISTENING...";
+  };
+
+  recognition.onend = () => {
+    $("micBtn").textContent = "⌁";
+    $("heroSubtitle").textContent = "PERSONAL AI · READY TO ASSIST";
+  };
+
+  recognition.onerror = () => {
+    $("micBtn").textContent = "⌁";
+  };
+
+  recognition.onresult = event => {
+    const transcript = event.results[0][0].transcript;
+    input.value = transcript;
+    sendMessage(transcript);
+  };
+
+  $("micBtn").addEventListener("click", () => {
+    try {
+      recognition.start();
+    } catch (error) {
+      console.warn(error);
+    }
+  });
+
+} else {
+  $("micBtn").disabled = true;
+  $("micBtn").title = "Голосовой ввод не поддерживается этим браузером";
+  $("voiceStatus").textContent = "NOT SUPPORTED";
+  $("voiceStatus").className = "status-value wait";
+}
+
+function updateClock() {
+  $("clock").textContent = new Date().toLocaleTimeString(
+    "ru-RU",
+    { hour12: false }
+  );
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+checkServer();
+</script>
+</body>
+</html>
