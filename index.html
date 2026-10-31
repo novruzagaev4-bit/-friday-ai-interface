@@ -4,355 +4,529 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#050d18">
-<title>F.R.I.D.A.Y. 5.0 — STARK EDITION</title>
+<meta name="theme-color" content="#050b14">
+<title>F.R.I.D.A.Y. 6.0 — STARK EDITION</title>
 
 <style>
 :root {
-  --cyan:#39dcff;
-  --blue:#168dff;
-  --dark:#050d18;
-  --panel:rgba(8,30,49,.82);
-  --line:rgba(57,220,255,.27);
-  --text:#d8f7ff;
-  --muted:#75aabd;
+  --cyan: #00d9ff;
+  --blue: #087cff;
+  --bg: #050b14;
+  --panel: rgba(7, 22, 38, .88);
+  --border: rgba(0, 217, 255, .25);
+  --text: #d8f7ff;
+  --muted: #66889c;
+  --green: #35ffb0;
+  --red: #ff526e;
 }
-*{box-sizing:border-box}
-body{
-  margin:0;min-height:100vh;
-  background:radial-gradient(ellipse at 50% 35%,#10304a,#071522 45%,#02070e);
-  color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
-  overflow-x:hidden;
-}
-body:before{
-  content:"";position:fixed;inset:0;pointer-events:none;
-  background-image:
-    linear-gradient(rgba(57,220,255,.035) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(57,220,255,.035) 1px,transparent 1px);
-  background-size:35px 35px;
-}
-header{
-  height:68px;padding:0 25px;
-  display:flex;align-items:center;justify-content:space-between;
-  border-bottom:1px solid var(--line);
-  background:rgba(2,10,19,.85);
-  position:relative;z-index:2;
-}
-.logo{font-size:19px;letter-spacing:4px;color:var(--cyan);font-weight:bold}
-.version{font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:5px}
-.top-status{font-size:11px;letter-spacing:1px;color:var(--cyan)}
-.dot{
-  display:inline-block;width:7px;height:7px;border-radius:50%;
-  background:#32f4a1;box-shadow:0 0 9px #32f4a1;margin-right:7px;
-}
-.layout{
-  max-width:1500px;margin:auto;padding:20px;
-  display:grid;grid-template-columns:245px minmax(280px,1fr) 260px;
-  gap:17px;min-height:calc(100vh - 68px);
-}
-.panel{
-  background:var(--panel);border:1px solid var(--line);
-  box-shadow:0 0 25px rgba(0,160,255,.06),inset 0 0 25px rgba(0,160,255,.025);
-  clip-path:polygon(0 0,calc(100% - 15px) 0,100% 15px,100% 100%,15px 100%,0 calc(100% - 15px));
-  padding:17px;
-}
-.panel-title{
-  color:var(--cyan);font-size:11px;letter-spacing:2px;
-  padding-bottom:12px;border-bottom:1px solid var(--line);
-  margin-bottom:15px;
-}
-.left,.right{display:flex;flex-direction:column;gap:17px}
-.system-item{margin:17px 0}
-.system-item div:first-child{
-  display:flex;justify-content:space-between;
-  font-size:11px;color:#b8e9f5;margin-bottom:8px;
-}
-.bar{height:3px;background:#173b50;overflow:hidden}
-.bar span{
-  display:block;height:100%;width:90%;
-  background:var(--cyan);box-shadow:0 0 10px var(--cyan);
-  transition:width .4s;
-}
-.small-data{font-size:11px;color:var(--muted);line-height:2}
-.center{
-  display:flex;flex-direction:column;align-items:center;
-  min-width:0;gap:18px;
-}
-.core-area{
-  width:100%;min-height:370px;
-  display:flex;flex-direction:column;align-items:center;
-  justify-content:center;position:relative;overflow:hidden;
-}
-.core{
-  width:250px;height:250px;position:relative;
-  display:flex;align-items:center;justify-content:center;
-  perspective:900px;transform-style:preserve-3d;
-}
-.reactor-ring{
-  position:absolute;border-radius:50%;
-  border:2px solid transparent;transform-style:preserve-3d;
-}
-.ring-a{
-  inset:5px;border-top-color:#75f3ff;border-bottom-color:#168dff;
-  box-shadow:0 0 15px #19caff;
-  animation:reactorSpin 7s linear infinite;
-}
-.ring-b{
-  inset:22px;border-left:3px solid #168dff;
-  border-right:3px solid #63eaff;
-  transform:rotateX(65deg);
-  animation:reactorReverse 5s linear infinite;
-}
-.ring-c{
-  inset:39px;border-top:2px dashed #b5faff;
-  border-bottom:2px dashed #168dff;
-  transform:rotateY(65deg);
-  animation:reactorSpin 9s linear infinite;
-}
-.ring-d{
-  inset:53px;border:2px solid rgba(57,220,255,.7);
-  box-shadow:inset 0 0 18px #168dff,0 0 20px #168dff;
-  animation:reactorPulse 2s ease-in-out infinite;
-}
-.reactor-inner{
-  width:90px;height:90px;border-radius:50%;
-  position:relative;display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(circle,#fff 0%,#83f5ff 12%,#159bff 40%,#032c53 75%);
-  box-shadow:0 0 20px #39dcff,0 0 50px #168dff,0 0 90px rgba(22,141,255,.65);
-  animation:reactorPulse 2.5s ease-in-out infinite;
-}
-.reactor-light{
-  width:35px;height:35px;border-radius:50%;background:#fff;
-  box-shadow:0 0 25px #fff,0 0 55px #39dcff;
-}
-.reactor-cross{
-  position:absolute;width:125%;height:125%;
-  border:1px solid rgba(160,245,255,.5);border-radius:50%;
-}
-@keyframes reactorSpin{
-  from{transform:rotateX(25deg) rotateZ(0deg)}
-  to{transform:rotateX(25deg) rotateZ(360deg)}
-}
-@keyframes reactorReverse{
-  from{transform:rotateX(65deg) rotateZ(360deg)}
-  to{transform:rotateX(65deg) rotateZ(0deg)}
-}
-@keyframes reactorPulse{
-  0%,100%{filter:brightness(.85)}
-  50%{filter:brightness(1.5)}
-}
-.core-label{
-  margin-top:24px;color:var(--cyan);letter-spacing:5px;
-  font-size:17px;text-shadow:0 0 15px var(--cyan);
-}
-.core-sub{font-size:10px;letter-spacing:3px;color:var(--muted);margin-top:8px}
-#wakeStatus{
-  color:var(--cyan);font-size:10px;letter-spacing:2px;margin-top:10px;
-  text-align:center;
-}
-.visualizer{
-  height:35px;display:flex;align-items:center;justify-content:center;gap:4px;
-}
-.visualizer span{
-  width:3px;height:7px;background:var(--cyan);
-  box-shadow:0 0 8px var(--cyan);border-radius:4px;
-}
-.visualizer.active span{animation:wave .65s ease-in-out infinite alternate}
-.visualizer span:nth-child(3n){animation-delay:.2s}
-.visualizer span:nth-child(2n){animation-delay:.4s}
-@keyframes wave{to{height:30px}}
-.chat-panel{
-  width:100%;display:flex;flex-direction:column;min-height:330px;
-}
-.messages{
-  height:260px;overflow-y:auto;padding:5px 2px;
-  display:flex;flex-direction:column;gap:12px;
-}
-.message{
-  max-width:90%;padding:11px 13px;
-  font-size:13px;line-height:1.5;
-  border:1px solid var(--line);background:rgba(5,24,39,.85);
-  white-space:pre-wrap;overflow-wrap:anywhere;
-}
-.message.user{align-self:flex-end;border-color:rgba(22,141,255,.55);color:#c4e8ff}
-.message.ai{align-self:flex-start;border-left:3px solid var(--cyan)}
-.message-label{font-size:9px;color:var(--cyan);letter-spacing:1.5px;margin-bottom:5px}
-.input-row{display:flex;gap:8px;margin-top:12px}
-input{
-  flex:1;min-width:0;background:#061522;border:1px solid var(--line);
-  color:white;padding:13px;font-size:13px;outline:none;
-}
-input:focus{border-color:var(--cyan);box-shadow:0 0 10px rgba(57,220,255,.15)}
-button{
-  border:1px solid var(--cyan);background:rgba(12,90,125,.22);
-  color:var(--cyan);padding:11px 14px;cursor:pointer;
-  letter-spacing:1px;font-size:11px;transition:.2s;
-}
-button:hover{background:rgba(57,220,255,.16);box-shadow:0 0 14px rgba(57,220,255,.2)}
-button:disabled{opacity:.4;cursor:wait}
-.voice-button{min-width:43px;font-size:16px}
-.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.action-grid button{min-height:42px;font-size:10px}
-.info-value{font-size:12px;color:#c5f4ff;margin-top:7px}
-.clock{font-size:25px;color:var(--cyan);letter-spacing:3px}
-.footer{text-align:center;color:#527d90;font-size:9px;letter-spacing:2px;padding:8px}
 
-@media(max-width:950px){
-  .layout{grid-template-columns:1fr 1fr}
-  .center{grid-column:1/-1;grid-row:1}
-  .left{grid-column:1;grid-row:2}
-  .right{grid-column:2;grid-row:2}
+* {
+  box-sizing: border-box;
 }
-@media(max-width:600px){
-  header{padding:0 14px;height:60px}
-  .logo{font-size:15px;letter-spacing:2px}
-  .top-status{font-size:9px}
-  .layout{display:flex;flex-direction:column;padding:12px;gap:12px}
-  .core-area{min-height:300px}
-  .core{width:215px;height:215px}
-  .reactor-inner{width:80px;height:80px}
-  .left,.right{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .panel{padding:13px}
-  .panel-title{font-size:9px}
-  .chat-panel{min-height:340px}
-  .messages{height:240px}
-  .input-row button{padding:10px}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 50% 15%, #0b2740 0%, transparent 55%),
+    linear-gradient(145deg, #030812, #071525 55%, #02060d);
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .17;
+  background-image:
+    linear-gradient(rgba(0,217,255,.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,217,255,.12) 1px, transparent 1px);
+  background-size: 35px 35px;
+}
+
+header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 17px 5%;
+  border-bottom: 1px solid var(--border);
+  background: rgba(2, 9, 18, .8);
+}
+
+.brand {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: var(--cyan);
+  text-shadow: 0 0 15px rgba(0,217,255,.55);
+}
+
+.brand small {
+  display: block;
+  margin-top: 4px;
+  font-size: 9px;
+  letter-spacing: 4px;
+  color: var(--muted);
+}
+
+.system-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 1px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 12px var(--green);
+}
+
+main {
+  position: relative;
+  z-index: 1;
+  width: min(1200px, 94%);
+  margin: 28px auto;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 1fr;
+  gap: 15px;
+}
+
+.panel {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel);
+  box-shadow: 0 0 25px rgba(0,130,255,.06);
+}
+
+.panel-title {
+  margin-bottom: 18px;
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 2px;
+}
+
+.metric {
+  margin: 17px 0;
+}
+
+.metric-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.bar {
+  height: 5px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: #10283b;
+}
+
+.bar-fill {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  box-shadow: 0 0 10px var(--cyan);
+  transition: width .4s;
+}
+
+.center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.reactor {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  margin: 10px auto 20px;
+  display: grid;
+  place-items: center;
+  border: 2px solid rgba(0,217,255,.5);
+  border-radius: 50%;
+  box-shadow:
+    0 0 20px rgba(0,217,255,.25),
+    inset 0 0 25px rgba(0,217,255,.15);
+}
+
+.reactor::before,
+.reactor::after {
+  content: "";
+  position: absolute;
+  border: 2px solid var(--cyan);
+  border-radius: 50%;
+  animation: rotate 8s linear infinite;
+}
+
+.reactor::before {
+  inset: 13px;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+.reactor::after {
+  inset: 27px;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  animation-direction: reverse;
+}
+
+.reactor-core {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: radial-gradient(circle, white 0%, var(--cyan) 30%, #0065b9 75%);
+  box-shadow: 0 0 25px var(--cyan), 0 0 65px var(--blue);
+}
+
+@keyframes rotate {
+  to { transform: rotate(360deg); }
+}
+
+.reactor.active .reactor-core {
+  animation: pulse 1.2s infinite alternate;
+}
+
+@keyframes pulse {
+  from { transform: scale(.9); }
+  to { transform: scale(1.13); }
+}
+
+.core-state {
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 2px;
+  min-height: 18px;
+}
+
+.clock {
+  margin-top: 14px;
+  font-size: 24px;
+  letter-spacing: 3px;
+}
+
+.small-info {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.chat-panel {
+  margin-top: 15px;
+}
+
+.messages {
+  height: 300px;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message {
+  max-width: 88%;
+  padding: 12px 14px;
+  border-radius: 9px;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.message.ai {
+  align-self: flex-start;
+  background: rgba(0, 133, 190, .12);
+  border-left: 2px solid var(--cyan);
+}
+
+.message.user {
+  align-self: flex-end;
+  background: rgba(0, 104, 255, .16);
+  border-right: 2px solid var(--blue);
+}
+
+.message-label {
+  margin-bottom: 5px;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--cyan);
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+input {
+  min-width: 0;
+  flex: 1;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  outline: none;
+  color: white;
+  background: #071625;
+}
+
+input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 10px rgba(0,217,255,.15);
+}
+
+button {
+  padding: 11px 15px;
+  border: 1px solid var(--cyan);
+  border-radius: 7px;
+  color: var(--cyan);
+  background: rgba(0,217,255,.08);
+  font-weight: 700;
+  cursor: pointer;
+  transition: .2s;
+}
+
+button:hover {
+  color: #001018;
+  background: var(--cyan);
+  box-shadow: 0 0 15px rgba(0,217,255,.4);
+}
+
+button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 14px;
+}
+
+.wake-status {
+  margin-top: 15px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 1px;
+}
+
+.quick-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.quick-buttons button {
+  font-size: 11px;
+}
+
+footer {
+  position: relative;
+  z-index: 1;
+  padding: 18px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+@media(max-width: 800px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .center {
+    grid-row: 1;
+  }
+
+  .reactor {
+    width: 165px;
+    height: 165px;
+  }
+
+  .messages {
+    height: 280px;
+  }
 }
 </style>
 </head>
 
 <body>
+
 <header>
-  <div>
-    <div class="logo">F.R.I.D.A.Y.</div>
-    <div class="version">STARK INDUSTRIES // INTERFACE 5.0</div>
+  <div class="brand">
+    F.R.I.D.A.Y.
+    <small>STARK INDUSTRIES // VERSION 6.0</small>
   </div>
-  <div class="top-status"><span class="dot" id="topDot"></span><span id="topStatus">INITIALIZING</span></div>
+
+  <div class="system-status">
+    <span class="dot" id="topDot"></span>
+    <span id="topStatus">INITIALIZING</span>
+  </div>
 </header>
 
-<main class="layout">
-  <aside class="left">
-    <section class="panel">
+<main>
+
+  <section class="dashboard">
+
+    <div class="panel">
       <div class="panel-title">SYSTEM DIAGNOSTICS</div>
-      <div class="system-item">
-        <div><span>API CONNECTION</span><span id="apiStatus">CHECKING</span></div>
-        <div class="bar"><span id="apiBar"></span></div>
-      </div>
-      <div class="system-item">
-        <div><span>AI CORE</span><span id="aiStatus">READY</span></div>
-        <div class="bar"><span style="width:100%"></span></div>
-      </div>
-      <div class="system-item">
-        <div><span>VOICE ENGINE</span><span id="voiceStatus">STANDBY</span></div>
-        <div class="bar"><span id="voiceBar" style="width:65%"></span></div>
-      </div>
-      <div class="system-item">
-        <div><span>INTERFACE</span><span>ONLINE</span></div>
-        <div class="bar"><span style="width:100%"></span></div>
-      </div>
-    </section>
 
-    <section class="panel">
-      <div class="panel-title">QUICK COMMANDS</div>
-      <div class="action-grid">
-        <button onclick="quick('Представься')">IDENTITY</button>
-        <button onclick="quick('Проведи диагностику системы')">DIAGNOSTICS</button>
-        <button onclick="quick('Какие у тебя возможности?')">CAPABILITIES</button>
-        <button onclick="quick('Расскажи о технологиях')">TECHNOLOGY</button>
+      <div class="metric">
+        <div class="metric-label">
+          <span>AI CONNECTION</span>
+          <span id="apiStatus">CHECKING</span>
+        </div>
+        <div class="bar"><div class="bar-fill" id="apiBar"></div></div>
       </div>
-    </section>
-  </aside>
 
-  <section class="center">
-    <div class="core-area">
-      <div class="core" id="core">
-        <div class="reactor-ring ring-a"></div>
-        <div class="reactor-ring ring-b"></div>
-        <div class="reactor-ring ring-c"></div>
-        <div class="reactor-ring ring-d"></div>
-        <div class="reactor-inner">
-          <div class="reactor-light"></div>
-          <div class="reactor-cross"></div>
+      <div class="metric">
+        <div class="metric-label">
+          <span>VOICE ENGINE</span>
+          <span id="voiceStatus">STANDBY</span>
+        </div>
+        <div class="bar"><div class="bar-fill" style="width:100%"></div></div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">
+          <span>AI CORE</span>
+          <span id="aiStatus">READY</span>
+        </div>
+        <div class="bar"><div class="bar-fill" style="width:100%"></div></div>
+      </div>
+
+      <div class="metric">
+        <div class="metric-label">
+          <span>SERVER</span>
+          <span id="serverStatus">CHECKING</span>
         </div>
       </div>
 
-      <div class="core-label">F.R.I.D.A.Y.</div>
-      <div class="core-sub" id="coreState">ARTIFICIAL INTELLIGENCE SYSTEM</div>
-      <div id="wakeStatus">WAKE WORD: OFF</div>
-
-      <div class="visualizer" id="visualizer">
-        <span></span><span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span><span></span>
+      <div class="metric">
+        <div class="metric-label">
+          <span>PLATFORM</span>
+          <span>WEB INTERFACE</span>
+        </div>
       </div>
     </div>
 
-    <section class="panel chat-panel">
-      <div class="panel-title">NEURAL COMMUNICATION CHANNEL</div>
-      <div class="messages" id="messages">
-        <div class="message ai">
-          <div class="message-label">F.R.I.D.A.Y. // SYSTEM</div>
-          Добро пожаловать. F.R.I.D.A.Y. 5.0 готова к работе. Чем могу помочь?
+    <div class="panel center">
+      <div class="panel-title">ARC REACTOR // AI CORE</div>
+
+      <div class="reactor" id="visualizer">
+        <div class="reactor-core"></div>
+      </div>
+
+      <div class="core-state" id="coreState">
+        ARTIFICIAL INTELLIGENCE SYSTEM
+      </div>
+
+      <div class="clock" id="clock">00:00:00</div>
+      <div class="small-info">F.R.I.D.A.Y. PERSONAL AI ASSISTANT</div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">VOICE CONTROL</div>
+
+      <div class="metric">
+        <div class="metric-label">
+          <span>WAKE WORD</span>
+          <span id="mode">STANDBY</span>
         </div>
+        <div class="bar"><div class="bar-fill" style="width:100%"></div></div>
       </div>
-      <div class="input-row">
-        <input id="userInput" placeholder="Введите команду..." autocomplete="off">
-        <button class="voice-button" id="micButton" onclick="toggleWakeWord()">🎙</button>
-        <button id="sendButton" onclick="sendMessage()">SEND</button>
+
+      <div class="wake-status" id="wakeStatus">
+        WAKE WORD: OFF
       </div>
-    </section>
+
+      <div class="controls">
+        <button id="micButton" onclick="toggleWakeWord()">
+          🎙 ACTIVATE
+        </button>
+
+        <button onclick="stopSpeaking()">
+          STOP VOICE
+        </button>
+      </div>
+
+      <div class="small-info">
+        Say: «Привет, Пятница»
+      </div>
+    </div>
+
   </section>
 
-  <aside class="right">
-    <section class="panel">
-      <div class="panel-title">STARK NETWORK</div>
-      <div class="small-data">
-        <div>SERVER STATUS</div>
-        <div class="info-value" id="serverStatus">CONNECTING...</div>
-        <br>
-        <div>AI PROVIDER</div>
-        <div class="info-value">OPENROUTER</div>
-        <br>
-        <div>VOICE OUTPUT</div>
-        <div class="info-value">EDGE TTS / BROWSER</div>
-        <br>
-        <div>API VERSION</div>
-        <div class="info-value">2.0</div>
-      </div>
-    </section>
+  <section class="panel chat-panel">
+    <div class="panel-title">NEURAL INTERFACE // COMMUNICATION</div>
 
-    <section class="panel">
-      <div class="panel-title">LOCAL SYSTEM</div>
-      <div class="small-data">
-        <div>LOCAL TIME</div>
-        <div class="clock" id="clock">--:--:--</div>
-        <br>
-        <div>INTERFACE VERSION</div>
-        <div class="info-value">F.R.I.D.A.Y. 5.0</div>
-        <br>
-        <div>OPERATING MODE</div>
-        <div class="info-value" id="mode">STANDBY</div>
+    <div class="messages" id="messages">
+      <div class="message ai">
+        <div class="message-label">F.R.I.D.A.Y. // SYSTEM</div>
+        Система готова. Ожидаю ваши команды.
       </div>
-    </section>
+    </div>
 
-    <section class="panel">
-      <div class="panel-title">CONTROL</div>
-      <div class="action-grid">
-        <button onclick="stopSpeaking()">STOP VOICE</button>
-        <button onclick="clearChat()">CLEAR CHAT</button>
-        <button onclick="toggleWakeWord()">MIC ON / OFF</button>
-        <button onclick="checkServer()">CHECK API</button>
-      </div>
-    </section>
-  </aside>
+    <div class="input-row">
+      <input
+        id="userInput"
+        type="text"
+        placeholder="Введите команду..."
+        autocomplete="off"
+      >
+
+      <button id="sendButton" onclick="sendMessage()">
+        SEND
+      </button>
+    </div>
+
+    <div class="controls">
+      <button onclick="clearChat()">CLEAR CHAT</button>
+    </div>
+  </section>
+
+  <section class="panel chat-panel">
+    <div class="panel-title">QUICK COMMANDS</div>
+
+    <div class="quick-buttons">
+      <button onclick="quick('Привет, представься')">WHO ARE YOU?</button>
+      <button onclick="quick('Какие у тебя возможности?')">SYSTEM INFO</button>
+      <button onclick="quick('Расскажи последние новости технологий')">TECHNOLOGY</button>
+      <button onclick="quick('Помоги мне с программированием')">CODING</button>
+    </div>
+  </section>
+
 </main>
 
-<div class="footer">STARK INDUSTRIES // F.R.I.D.A.Y. AI SYSTEM // 5.0</div>
+<footer>
+  F.R.I.D.A.Y. 6.0 // STARK INDUSTRIES // ALL SYSTEMS NOMINAL
+</footer>
 
 <script>
+"use strict";
+
 const API_BASE = "https://friday-ai-backend-gfc4.onrender.com";
 
 const messages = document.getElementById("messages");
@@ -360,59 +534,66 @@ const input = document.getElementById("userInput");
 const sendButton = document.getElementById("sendButton");
 const visualizer = document.getElementById("visualizer");
 
-let currentAudio = null;
-let currentAudioUrl = null;
-let busy = false;
-let wakeRecognition = null;
-let commandRecognition = null;
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+let recognition = null;
 let wakeEnabled = false;
 let commandMode = false;
+let busy = false;
 let speechActive = false;
-let wakeRestartTimer = null;
+let recognitionRunning = false;
+let waitingForCommand = false;
+let restartTimer = null;
+let currentAudio = null;
+let currentAudioUrl = null;
 
-function addMessage(text, type){
+function addMessage(text, type) {
   const div = document.createElement("div");
   div.className = "message " + type;
 
   const label = document.createElement("div");
   label.className = "message-label";
-  label.textContent = type === "user" ? "YOU // COMMAND" : "F.R.I.D.A.Y. // RESPONSE";
+  label.textContent = type === "user"
+    ? "YOU // COMMAND"
+    : "F.R.I.D.A.Y. // RESPONSE";
 
   const content = document.createElement("div");
   content.textContent = text;
 
-  div.appendChild(label);
-  div.appendChild(content);
+  div.append(label, content);
   messages.appendChild(div);
   messages.scrollTop = messages.scrollHeight;
 }
 
-function setActivity(active, state){
+function setActivity(active, state) {
   visualizer.classList.toggle("active", active);
   document.getElementById("coreState").textContent = state;
-  document.getElementById("mode").textContent = active ? "ACTIVE" : "STANDBY";
 }
 
-function updateWakeStatus(text){
+function updateWakeStatus(text) {
   document.getElementById("wakeStatus").textContent = text;
 }
 
-function cleanupAudio(){
-  if(currentAudio){
+function cleanupAudio() {
+  if (currentAudio) {
     currentAudio.pause();
+    currentAudio.onended = null;
+    currentAudio.onerror = null;
     currentAudio = null;
   }
-  if(currentAudioUrl){
+
+  if (currentAudioUrl) {
     URL.revokeObjectURL(currentAudioUrl);
     currentAudioUrl = null;
   }
 }
 
-function stopSpeaking(){
+function stopSpeaking() {
   cleanupAudio();
   speechActive = false;
 
-  if("speechSynthesis" in window){
+  if ("speechSynthesis" in window) {
     speechSynthesis.cancel();
   }
 
@@ -420,10 +601,9 @@ function stopSpeaking(){
   document.getElementById("voiceStatus").textContent = "STANDBY";
 }
 
-function browserVoice(text){
+function browserVoice(text) {
   return new Promise(resolve => {
-    if(!("speechSynthesis" in window)){
-      speechActive = false;
+    if (!("speechSynthesis" in window)) {
       resolve();
       return;
     }
@@ -437,7 +617,7 @@ function browserVoice(text){
 
     utterance.onstart = () => {
       speechActive = true;
-      setActivity(true, "BROWSER VOICE ACTIVE");
+      setActivity(true, "F.R.I.D.A.Y. SPEAKING");
       document.getElementById("voiceStatus").textContent = "ACTIVE";
     };
 
@@ -457,197 +637,299 @@ function browserVoice(text){
   });
 }
 
-async function speak(text){
+async function speak(text) {
   cleanupAudio();
   speechActive = true;
 
   document.getElementById("voiceStatus").textContent = "CONNECTING";
   setActivity(true, "VOICE ENGINE INITIALIZING");
 
-  try{
+  try {
     const response = await fetch(API_BASE + "/tts", {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({message:text})
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text })
     });
 
-    if(!response.ok) throw new Error("TTS unavailable");
+    if (!response.ok) throw new Error("TTS unavailable");
 
     const blob = await response.blob();
-    if(!blob.size) throw new Error("Empty audio");
+    if (!blob.size) throw new Error("Empty audio");
 
     currentAudioUrl = URL.createObjectURL(blob);
     currentAudio = new Audio(currentAudioUrl);
 
-    await new Promise(async resolve => {
-      currentAudio.onended = () => {
-        cleanupAudio();
-        resolve();
-      };
-
-      currentAudio.onerror = () => {
-        cleanupAudio();
-        resolve();
-      };
-
-      try{
-        await currentAudio.play();
-        document.getElementById("voiceStatus").textContent = "ACTIVE";
-        setActivity(true, "F.R.I.D.A.Y. SPEAKING");
-      }catch(error){
-        cleanupAudio();
-        resolve();
-      }
+    await new Promise((resolve, reject) => {
+      currentAudio.onended = resolve;
+      currentAudio.onerror = reject;
+      currentAudio.play().catch(reject);
     });
 
-    if(!currentAudio && !speechActive){
-      setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
-      document.getElementById("voiceStatus").textContent = "STANDBY";
-      return;
-    }
-
-    if(speechActive){
-      speechActive = false;
-      setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
-      document.getElementById("voiceStatus").textContent = "STANDBY";
-    }
-  }catch(error){
+  } catch (error) {
     console.warn("Cloud voice unavailable:", error);
+    cleanupAudio();
+    speechActive = false;
     await browserVoice(text);
+  }
+
+  cleanupAudio();
+  speechActive = false;
+  setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
+  document.getElementById("voiceStatus").textContent = "STANDBY";
+}
+
+function scheduleRecognition(delay = 800) {
+  clearTimeout(restartTimer);
+
+  if (!wakeEnabled || busy || speechActive) return;
+
+  restartTimer = setTimeout(startRecognition, delay);
+}
+
+function startRecognition() {
+  if (!wakeEnabled || !recognition ||
+      recognitionRunning || busy || speechActive) return;
+
+  try {
+    recognition.start();
+  } catch (error) {
+    console.warn("Recognition start:", error);
   }
 }
 
-async function sendMessage(){
-  const text = input.value.trim();
-  if(!text || busy) return;
+function enableWakeWord() {
+  if (!SpeechRecognition) {
+    updateWakeStatus("РАСПОЗНАВАНИЕ НЕ ПОДДЕРЖИВАЕТСЯ");
+    addMessage(
+      "Этот браузер не поддерживает голосовое распознавание. Попробуй Google Chrome.",
+      "ai"
+    );
+    return;
+  }
+
+  if (wakeEnabled) return;
+
+  wakeEnabled = true;
+  commandMode = false;
+  waitingForCommand = false;
+
+  recognition = new SpeechRecognition();
+  recognition.lang = "ru-RU";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 3;
+
+  recognition.onstart = () => {
+    recognitionRunning = true;
+
+    updateWakeStatus(commandMode
+      ? "● СЛУШАЮ КОМАНДУ"
+      : "● ОЖИДАНИЕ: «ПРИВЕТ, ПЯТНИЦА»");
+
+    document.getElementById("micButton").textContent = "🔵 LISTENING";
+    document.getElementById("voiceStatus").textContent = "LISTENING";
+
+    setActivity(true, commandMode
+      ? "LISTENING COMMAND"
+      : "AWAITING WAKE WORD");
+  };
+
+  recognition.onresult = event => {
+    const transcript = event.results[0][0].transcript
+      .toLowerCase()
+      .replace(/[.,!?]/g, "")
+      .trim();
+
+    console.log("Recognized:", transcript);
+
+    if (!commandMode) {
+      const wakePattern = /привет\s+пятниц[аы]|пятниц[аы]/i;
+
+      if (wakePattern.test(transcript)) {
+        waitingForCommand = true;
+        commandMode = true;
+        updateWakeStatus("● АКТИВАЦИЯ");
+        recognition.stop();
+      }
+
+      return;
+    }
+
+    if (transcript) {
+      commandMode = false;
+      waitingForCommand = false;
+      recognition.stop();
+
+      input.value = transcript;
+      sendMessage(transcript);
+    }
+  };
+
+  recognition.onerror = event => {
+    console.warn("Microphone error:", event.error);
+
+    if (event.error === "not-allowed" ||
+        event.error === "service-not-allowed") {
+      disableWakeWord();
+      updateWakeStatus("НЕТ ДОСТУПА К МИКРОФОНУ");
+      addMessage("Разреши доступ к микрофону в настройках браузера.", "ai");
+      return;
+    }
+
+    if (event.error === "audio-capture") {
+      updateWakeStatus("МИКРОФОН НЕ НАЙДЕН");
+    }
+  };
+
+  recognition.onend = async () => {
+    recognitionRunning = false;
+
+    if (!wakeEnabled) return;
+
+    if (waitingForCommand && !busy) {
+      waitingForCommand = false;
+
+      await speak("Слушаю вас.");
+
+      if (!wakeEnabled) return;
+
+      commandMode = true;
+      updateWakeStatus("● ГОВОРИТЕ КОМАНДУ");
+      scheduleRecognition(500);
+      return;
+    }
+
+    if (!busy && !speechActive) {
+      updateWakeStatus(commandMode
+        ? "● ОЖИДАНИЕ КОМАНДЫ"
+        : "● ОЖИДАНИЕ: «ПРИВЕТ, ПЯТНИЦА»");
+
+      scheduleRecognition(800);
+    }
+  };
+
+  updateWakeStatus("ЗАПУСК МИКРОФОНА...");
+  startRecognition();
+}
+
+function disableWakeWord() {
+  wakeEnabled = false;
+  commandMode = false;
+  waitingForCommand = false;
+
+  clearTimeout(restartTimer);
+
+  if (recognition) {
+    try {
+      recognition.stop();
+    } catch (error) {}
+  }
+
+  recognition = null;
+  recognitionRunning = false;
+
+  document.getElementById("micButton").textContent = "🎙 ACTIVATE";
+  document.getElementById("voiceStatus").textContent = "STANDBY";
+
+  updateWakeStatus("WAKE WORD: OFF");
+  setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
+}
+
+function toggleWakeWord() {
+  if (wakeEnabled) {
+    disableWakeWord();
+    addMessage("Голосовая активация отключена.", "ai");
+  } else {
+    enableWakeWord();
+  }
+}
+
+async function sendMessage(voiceText = null) {
+  const text = (voiceText || input.value).trim();
+
+  if (!text || busy) return;
 
   stopSpeaking();
+
   addMessage(text, "user");
   input.value = "";
 
   busy = true;
   sendButton.disabled = true;
   sendButton.textContent = "...";
+
   document.getElementById("aiStatus").textContent = "PROCESSING";
   setActivity(true, "PROCESSING REQUEST");
 
-  try{
+  if (recognition && recognitionRunning) {
+    try {
+      recognition.stop();
+    } catch (error) {}
+  }
+
+  try {
     const response = await fetch(API_BASE + "/chat", {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({message:text})
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text })
     });
 
-    if(!response.ok) throw new Error("Server error: " + response.status);
+    if (!response.ok) {
+      throw new Error("Server error: " + response.status);
+    }
 
     const data = await response.json();
-    if(!data.reply) throw new Error("Empty AI response");
+
+    if (!data.reply) throw new Error("Empty AI response");
 
     addMessage(data.reply, "ai");
     await speak(data.reply.trim());
-  }catch(error){
-    addMessage("Не удалось получить ответ. Проверь подключение к серверу. (" + error.message + ")", "ai");
+
+  } catch (error) {
+    console.error(error);
+
+    addMessage(
+      "Не удалось получить ответ. Проверь подключение к серверу. " +
+      error.message,
+      "ai"
+    );
+
     setActivity(false, "CONNECTION ERROR");
-  }finally{
+
+  } finally {
     busy = false;
     sendButton.disabled = false;
     sendButton.textContent = "SEND";
     document.getElementById("aiStatus").textContent = "READY";
+
+    if (wakeEnabled) {
+      commandMode = false;
+      updateWakeStatus("● ОЖИДАНИЕ: «ПРИВЕТ, ПЯТНИЦА»");
+      scheduleRecognition(1200);
+    }
   }
 }
 
-function quick(text){
+function quick(text) {
   input.value = text;
   sendMessage();
 }
 
-function clearChat(){
+function clearChat() {
   messages.innerHTML = "";
   addMessage("Канал очищен. Готова к новым командам.", "ai");
   stopSpeaking();
 }
 
-input.addEventListener("keydown", event => {
-  if(event.key === "Enter") sendMessage();
-});
-
-/* MANUAL VOICE INPUT */
-
-function startListening(){
-  const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  if(!SpeechRecognition){
-    addMessage("Голосовой ввод не поддерживается. Попробуй Chrome.", "ai");
-    return;
-  }
-
-  const recognition = new SpeechRecognition();
-  recognition.lang = "ru-RU";
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
-
-  recognition.onstart = () => setActivity(true, "LISTENING...");
-
-  recognition.onresult = event => {
-    input.value = event.results[0][0].transcript;
-    sendMessage();
-  };
-
-  recognition.onerror = event => {
-    addMessage("Ошибка голосового ввода: " + event.error, "ai");
-  };
-
-  recognition.onend = () => {
-    if(!busy && !speechActive){
-      setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
-    }
-  };
-
-  recognition.start();
-}
-
-/* WAKE WORD: ПРИВЕТ, ПЯТНИЦА */
-
-function toggleWakeWord(){
-  if(wakeEnabled){
-    disableWakeWord();
-  }else{
-    enableWakeWord();
-  }
-}
-
-function enableWakeWord(){
-  const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  if(!SpeechRecognition){
-    updateWakeStatus("MICROPHONE NOT SUPPORTED");
-    addMessage("Голосовая активация не поддерживается этим браузером. Попробуй Chrome.", "ai");
-    return;
-  }
-
-  wakeEnabled = true;
-  commandMode = false;
-
-  wakeRecognition = new SpeechRecognition();
-  wakeRecognition.lang = "ru-RU";
-  wakeRecognition.continuous = true;
-  wakeRecognition.interimResults = false;
-  wakeRecognition.maxAlternatives = 1;
-
-  wakeRecognition.onstart = () => {
-    updateWakeStatus("● ОЖИДАНИЕ: «ПРИВЕТ, ПЯТНИЦА»");
-    document.getElementById("micButton").textContent = "🔵";
-  };
-
-  wakeRecognition.onresult = event => {
-    const result = event.results[event.results.length - 1][0].transcript
-      .toLowerCase()
-      .replace(/[.,!?]/g, "")
-      .trim();
-
-    console.log("Recognized:", result);
-
-    if(!commandMode &&
-      (
+function checkServer() {
+  fetch(API_BASE + "/health")
+    .then(response => {
+      if (!response.ok) throw new Error("API offline");
+      return response.json();
+    })
+    .then(() => {
+      document.getElementById("serverStatus").textContent = "ONLINE";
+      document.getElementById("apiStatus").textContent = "CONNECTED";
+      document.getElementById("apiBar").style.width = "100%";
+      document.getElementById("topStatus").textContent = "SYSTEM ONLINE";
+      document.getElementById("topDot").style.background = "#35ffb0";
