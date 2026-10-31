@@ -4,585 +4,410 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#050b16">
-<title>F.R.I.D.A.Y. 4.0 — AI Interface</title>
+<meta name="theme-color" content="#050d18">
+<title>F.R.I.D.A.Y. 5.0 — STARK EDITION</title>
 
 <style>
 :root {
-  --bg:#050b16;
-  --line:rgba(77,190,255,.22);
-  --cyan:#54d9ff;
-  --blue:#398dff;
-  --text:#e8f7ff;
-  --muted:#7f9bb5;
-  --green:#54f0b0;
-  --red:#ff7185;
+  --cyan:#39dcff;
+  --blue:#168dff;
+  --dark:#050d18;
+  --panel:rgba(8,30,49,.78);
+  --line:rgba(57,220,255,.27);
+  --text:#d8f7ff;
+  --muted:#75aabd;
 }
 *{box-sizing:border-box}
-html,body{
-  margin:0;min-height:100%;background:var(--bg);
-  color:var(--text);
-  font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif
-}
 body{
+  margin:0;
   min-height:100vh;
   background:
-  radial-gradient(ellipse at 50% 35%,rgba(19,94,163,.22),transparent 45%),
-  radial-gradient(ellipse at 10% 90%,rgba(0,205,255,.08),transparent 35%),
-  linear-gradient(145deg,#071120,#030812 55%,#071426);
-  overflow-x:hidden
+    radial-gradient(ellipse at 50% 35%,#10304a 0%,#071522 40%,#02070e 100%);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  overflow-x:hidden;
 }
 body:before{
-  content:"";position:fixed;inset:0;pointer-events:none;opacity:.17;
+  content:"";
+  position:fixed;inset:0;
+  pointer-events:none;
   background-image:
-  linear-gradient(rgba(75,170,230,.13) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(75,170,230,.13) 1px,transparent 1px);
-  background-size:42px 42px;
-  mask-image:linear-gradient(to bottom,black,transparent 92%)
+    linear-gradient(rgba(57,220,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(57,220,255,.035) 1px,transparent 1px);
+  background-size:35px 35px;
+  mask-image:linear-gradient(to bottom,black,transparent);
 }
-button,textarea{font:inherit}
-button{cursor:pointer}
-.app{
-  position:relative;z-index:1;min-height:100vh;
-  display:flex;flex-direction:column;
-  max-width:1700px;margin:auto;padding:18px 24px 20px
-}
-.topbar{
+header{
+  height:68px;padding:0 25px;
   display:flex;align-items:center;justify-content:space-between;
-  gap:16px;padding:7px 2px 18px;border-bottom:1px solid var(--line)
+  border-bottom:1px solid var(--line);
+  background:rgba(2,10,19,.8);
+  position:relative;z-index:2;
 }
-.brand{display:flex;align-items:center;gap:13px;min-width:0}
-.brand-mark{
-  width:43px;height:43px;border:1px solid rgba(84,217,255,.65);
-  border-radius:13px;display:grid;place-items:center;color:var(--cyan);
-  font-weight:800;letter-spacing:-2px;
-  box-shadow:0 0 22px rgba(84,217,255,.16),inset 0 0 18px rgba(84,217,255,.08)
-}
-.brand h1{font-size:17px;letter-spacing:.19em;margin:0;font-weight:750}
-.brand small{
-  display:block;color:var(--muted);letter-spacing:.17em;
-  font-size:9px;margin-top:4px
-}
-.top-right{
-  display:flex;align-items:center;gap:18px;
-  color:var(--muted);font-size:11px;letter-spacing:.1em
-}
-.live{display:flex;align-items:center;gap:8px;color:var(--green)}
-.dot{
-  width:7px;height:7px;background:currentColor;border-radius:50%;
-  box-shadow:0 0 12px currentColor
-}
-.clock{font-variant-numeric:tabular-nums}
-.main{
-  display:grid;grid-template-columns:minmax(0,1fr) 310px;
-  gap:18px;flex:1;padding-top:18px;min-height:0
-}
-.workspace{
-  display:grid;grid-template-rows:minmax(300px,42vh) minmax(260px,1fr);
-  gap:18px;min-height:0
+.logo{font-size:19px;letter-spacing:4px;color:var(--cyan);font-weight:bold}
+.version{font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:5px}
+.top-status{font-size:11px;letter-spacing:1px;color:var(--cyan)}
+.layout{
+  max-width:1500px;margin:auto;padding:20px;
+  display:grid;grid-template-columns:245px minmax(280px,1fr) 260px;
+  gap:17px;min-height:calc(100vh - 68px);
 }
 .panel{
-  background:linear-gradient(145deg,rgba(13,31,54,.82),rgba(5,15,29,.83));
-  border:1px solid var(--line);border-radius:18px;
-  box-shadow:0 0 32px rgba(36,164,255,.12);
-  backdrop-filter:blur(14px);min-width:0
+  background:var(--panel);
+  border:1px solid var(--line);
+  box-shadow:0 0 25px rgba(0,160,255,.06),inset 0 0 25px rgba(0,160,255,.025);
+  clip-path:polygon(0 0,calc(100% - 15px) 0,100% 15px,100% 100%,15px 100%,0 calc(100% - 15px));
+  padding:17px;
 }
-.hero{position:relative;overflow:hidden;display:grid;place-items:center}
-.hero:before{
-  content:"";position:absolute;width:560px;height:560px;border-radius:50%;
-  border:1px solid rgba(64,183,255,.08);
-  box-shadow:0 0 0 35px rgba(64,183,255,.025),0 0 0 75px rgba(64,183,255,.018)
+.panel-title{
+  color:var(--cyan);font-size:11px;letter-spacing:2px;
+  padding-bottom:12px;border-bottom:1px solid var(--line);
+  margin-bottom:15px;
 }
-.hero-grid{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse at center,rgba(18,119,193,.13),transparent 55%)
+.left,.right{display:flex;flex-direction:column;gap:17px}
+.system-item{margin:17px 0}
+.system-item div:first-child{
+  display:flex;justify-content:space-between;
+  font-size:11px;color:#b8e9f5;margin-bottom:8px;
 }
-.core-wrap{
-  position:relative;width:min(270px,54vw);aspect-ratio:1;
-  display:grid;place-items:center
+.dot{
+  display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:#32f4a1;box-shadow:0 0 9px #32f4a1;margin-right:7px;
 }
-.orbit{
-  position:absolute;inset:5%;border:1px solid rgba(74,196,255,.36);
-  border-radius:50%;animation:spin 22s linear infinite
+.bar{height:3px;background:#173b50;overflow:hidden}
+.bar span{
+  display:block;height:100%;width:90%;
+  background:var(--cyan);box-shadow:0 0 10px var(--cyan);
 }
-.orbit:before,.orbit:after{
-  content:"";position:absolute;width:9px;height:9px;border-radius:50%;
-  background:var(--cyan);box-shadow:0 0 16px var(--cyan);top:13%;left:17%
+.small-data{font-size:11px;color:var(--muted);line-height:2}
+.center{
+  display:flex;flex-direction:column;align-items:center;
+  min-width:0;gap:18px;
 }
-.orbit:after{
-  width:5px;height:5px;top:auto;left:auto;bottom:8%;right:22%;
-  background:var(--blue)
-}
-.orbit.two{
-  inset:15%;border-style:dashed;border-color:rgba(57,141,255,.45);
-  animation:spin 16s linear infinite reverse
-}
-.orbit.three{
-  inset:25%;border-color:rgba(84,217,255,.18);
-  animation-duration:28s
+.core-area{
+  width:100%;min-height:370px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
 }
 .core{
-  width:44%;aspect-ratio:1;border-radius:50%;display:grid;
-  place-items:center;color:#dffaff;font-size:clamp(25px,4vw,42px);
-  font-weight:300;letter-spacing:-.08em;
-  background:radial-gradient(circle at 35% 30%,#5be5ff 0%,#187db9 28%,#092b52 60%,#061426 76%);
-  border:1px solid rgba(115,226,255,.8);
-  box-shadow:0 0 25px rgba(61,202,255,.6),0 0 75px rgba(32,138,255,.3),inset 0 0 26px rgba(143,238,255,.35);
-  animation:pulse 3s ease-in-out infinite
+  width:220px;height:220px;position:relative;
+  display:flex;align-items:center;justify-content:center;
 }
-.hero-label{position:absolute;bottom:24px;text-align:center}
-.hero-label strong{
-  display:block;font-size:13px;letter-spacing:.32em;color:var(--cyan)
+.ring{
+  position:absolute;border-radius:50%;border:1px solid var(--cyan);
+  box-shadow:0 0 12px rgba(57,220,255,.35),inset 0 0 12px rgba(57,220,255,.15);
 }
-.hero-label span{
-  display:block;margin-top:7px;font-size:10px;
-  color:var(--muted);letter-spacing:.16em
+.ring.one{inset:0;border-style:dashed;animation:spin 24s linear infinite}
+.ring.two{inset:15px;border-width:2px;border-color:#168dff;animation:spin 12s linear infinite reverse}
+.ring.three{inset:31px;border-style:dotted;animation:spin 18s linear infinite}
+.core-center{
+  width:105px;height:105px;border-radius:50%;
+  background:radial-gradient(circle,#b9faff 0%,#39dcff 12%,#0879c5 38%,#031827 72%);
+  box-shadow:0 0 25px #1dbbff,0 0 65px rgba(0,157,255,.55);
+  animation:pulse 3s ease-in-out infinite;
 }
-.corner{
-  position:absolute;color:rgba(108,190,235,.58);
-  font-size:9px;letter-spacing:.15em
+.core:before,.core:after{
+  content:"";position:absolute;border:1px solid rgba(57,220,255,.6);
+  border-radius:50%;inset:-12px;
 }
-.corner.tl{top:18px;left:20px}
-.corner.tr{top:18px;right:20px}
-.corner.bl{bottom:18px;left:20px}
-.chat-panel{display:flex;flex-direction:column;overflow:hidden}
-.panel-head{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:12px;padding:15px 18px;border-bottom:1px solid var(--line)
+.core:after{inset:-25px;border-color:rgba(57,220,255,.2)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{50%{transform:scale(1.08);filter:brightness(1.3)}}
+.core-label{
+  margin-top:24px;color:var(--cyan);letter-spacing:5px;
+  font-size:17px;text-shadow:0 0 15px var(--cyan);
 }
-.panel-title{font-size:11px;letter-spacing:.19em;color:#bcecff;font-weight:700}
-.subtle{color:var(--muted);font-size:10px;letter-spacing:.08em}
-.chat-log{
-  flex:1;overflow-y:auto;padding:17px 18px;
-  display:flex;flex-direction:column;gap:13px;min-height:130px
+.core-sub{font-size:10px;letter-spacing:3px;color:var(--muted);margin-top:8px}
+.visualizer{
+  height:35px;display:flex;align-items:center;justify-content:center;gap:4px;
+}
+.visualizer span{
+  width:3px;height:7px;background:var(--cyan);
+  box-shadow:0 0 8px var(--cyan);border-radius:4px;
+}
+.visualizer.active span{animation:wave .65s ease-in-out infinite alternate}
+.visualizer span:nth-child(3n){animation-delay:.2s}
+.visualizer span:nth-child(2n){animation-delay:.4s}
+@keyframes wave{to{height:30px}}
+.chat-panel{
+  width:100%;display:flex;flex-direction:column;min-height:330px;
+}
+.messages{
+  height:260px;overflow-y:auto;padding:5px 2px;
+  display:flex;flex-direction:column;gap:12px;
 }
 .message{
-  max-width:88%;padding:11px 14px;border-radius:12px;
-  font-size:13px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere
+  max-width:90%;padding:11px 13px;
+  font-size:13px;line-height:1.5;
+  border:1px solid var(--line);background:rgba(5,24,39,.85);
+  white-space:pre-wrap;overflow-wrap:anywhere;
 }
-.message.ai{
-  align-self:flex-start;background:rgba(31,93,139,.22);
-  border:1px solid rgba(84,217,255,.2)
+.message.user{align-self:flex-end;border-color:rgba(22,141,255,.55);color:#c4e8ff}
+.message.ai{align-self:flex-start;border-left:3px solid var(--cyan)}
+.message-label{font-size:9px;color:var(--cyan);letter-spacing:1.5px;margin-bottom:5px}
+.input-row{display:flex;gap:8px;margin-top:12px}
+input{
+  flex:1;min-width:0;background:#061522;border:1px solid var(--line);
+  color:white;padding:13px;font-size:13px;outline:none;
 }
-.message.user{
-  align-self:flex-end;background:rgba(42,111,205,.2);
-  border:1px solid rgba(69,153,255,.3)
+input:focus{border-color:var(--cyan);box-shadow:0 0 10px rgba(57,220,255,.15)}
+button{
+  border:1px solid var(--cyan);background:rgba(12,90,125,.22);
+  color:var(--cyan);padding:11px 14px;cursor:pointer;
+  letter-spacing:1px;font-size:11px;transition:.2s;
 }
-.message .who{
-  display:block;color:var(--cyan);font-size:9px;
-  letter-spacing:.16em;margin-bottom:5px
-}
-.composer{
-  display:flex;gap:10px;padding:13px;border-top:1px solid var(--line)
-}
-.composer textarea{
-  flex:1;min-width:0;resize:none;min-height:45px;max-height:120px;
-  border:1px solid rgba(82,173,225,.25);border-radius:11px;
-  background:rgba(2,10,21,.7);color:var(--text);
-  padding:12px 13px;outline:none;font-size:13px
-}
-.composer textarea:focus{
-  border-color:rgba(84,217,255,.7);
-  box-shadow:0 0 0 3px rgba(84,217,255,.07)
-}
-.btn{
-  border:1px solid rgba(84,217,255,.35);color:var(--cyan);
-  background:rgba(22,91,139,.18);border-radius:11px;
-  padding:0 15px;font-size:11px;letter-spacing:.1em;transition:.2s
-}
-.btn:hover{
-  background:rgba(37,139,196,.3);
-  box-shadow:0 0 18px rgba(84,217,255,.13)
-}
-.btn.primary{
-  background:linear-gradient(135deg,#137db4,#1453a2);
-  color:white;border-color:rgba(105,222,255,.65);min-width:82px
-}
-.btn.icon-btn{min-width:45px;padding:0 12px;font-size:16px}
-.side{display:flex;flex-direction:column;gap:18px}
-.status-panel{padding:17px}
-.status-head{
-  display:flex;justify-content:space-between;align-items:center;margin-bottom:18px
-}
-.status-list{display:flex;flex-direction:column;gap:15px}
-.status-row{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:10px;font-size:11px
-}
-.status-row span:first-child{color:var(--muted)}
-.status-value{color:var(--green);text-align:right}
-.status-value.wait{color:#ffd27a}
-.status-value.error{color:var(--red)}
-.meter{
-  height:4px;background:rgba(95,156,193,.13);
-  border-radius:8px;margin-top:8px;overflow:hidden
-}
-.meter i{
-  display:block;width:72%;height:100%;
-  background:linear-gradient(90deg,#1687c6,#5de5ff);
-  box-shadow:0 0 10px var(--cyan)
-}
-.quick-panel{padding:17px}
-.quick-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px
-}
-.quick{
-  min-height:66px;border:1px solid rgba(77,190,255,.18);
-  background:rgba(12,39,66,.45);border-radius:11px;
-  color:#bdeaff;text-align:left;padding:11px;font-size:10px;
-  letter-spacing:.08em
-}
-.quick b{
-  display:block;font-size:17px;color:var(--cyan);
-  margin-bottom:5px;font-weight:500
-}
-.quick:hover{
-  border-color:rgba(84,217,255,.6);
-  background:rgba(22,87,129,.35)
-}
-.system-note{
-  color:var(--muted);font-size:10px;line-height:1.6;
-  margin-top:auto;padding:0 4px
-}
+button:hover{background:rgba(57,220,255,.16);box-shadow:0 0 14px rgba(57,220,255,.2)}
+button:disabled{opacity:.4;cursor:wait}
+.voice-button{min-width:43px;font-size:16px}
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.action-grid button{min-height:42px;font-size:10px}
+.info-value{font-size:12px;color:#c5f4ff;margin-top:7px}
+.clock{font-size:25px;color:var(--cyan);letter-spacing:3px}
 .footer{
-  display:flex;justify-content:space-between;gap:12px;
-  color:#58758f;font-size:9px;letter-spacing:.13em;padding:15px 2px 0
+  text-align:center;color:#527d90;font-size:9px;
+  letter-spacing:2px;padding:8px;
 }
-.typing{color:var(--cyan);font-size:11px;padding:0 18px 10px;display:none}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes pulse{
-  0%,100%{transform:scale(.96);filter:brightness(.92)}
-  50%{transform:scale(1.04);filter:brightness(1.18)}
+@media(max-width:950px){
+  .layout{grid-template-columns:1fr 1fr}
+  .center{grid-column:1/-1;grid-row:1}
+  .left{grid-column:1;grid-row:2}
+  .right{grid-column:2;grid-row:2}
 }
-@media(max-width:900px){
-  .app{padding:12px}
-  .main{grid-template-columns:1fr}
-  .workspace{grid-template-rows:300px minmax(360px,1fr)}
-  .side{display:grid;grid-template-columns:1fr 1fr}
-  .system-note{grid-column:1/-1}
-  .top-right .clock{display:none}
-}
-@media(max-width:560px){
-  .topbar{align-items:flex-start}
-  .brand h1{font-size:14px}
-  .top-right{font-size:9px}
-  .workspace{grid-template-rows:270px minmax(390px,1fr);gap:12px}
-  .main{gap:12px;padding-top:12px}
-  .side{grid-template-columns:1fr;gap:12px}
-  .message{max-width:96%}
-  .composer{gap:7px;padding:9px}
-  .btn.primary{min-width:65px;padding:0 10px}
-  .hero-label{bottom:17px}
-  .footer{font-size:8px}
+@media(max-width:600px){
+  header{padding:0 14px;height:60px}
+  .logo{font-size:15px;letter-spacing:2px}
+  .top-status{font-size:9px}
+  .layout{display:flex;flex-direction:column;padding:12px;gap:12px}
+  .core-area{min-height:300px}
+  .core{width:185px;height:185px}
+  .core-center{width:85px;height:85px}
+  .left,.right{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .panel{padding:13px}
+  .panel-title{font-size:9px}
+  .chat-panel{min-height:340px}
+  .messages{height:240px}
+  .input-row button{padding:10px}
 }
 </style>
 </head>
 
 <body>
-<div class="app">
-<header class="topbar">
-  <div class="brand">
-    <div class="brand-mark">F.</div>
-    <div>
-      <h1>F.R.I.D.A.Y.</h1>
-      <small>PERSONAL AI SYSTEM · VERSION 4.0</small>
-    </div>
+<header>
+  <div>
+    <div class="logo">F.R.I.D.A.Y.</div>
+    <div class="version">STARK INDUSTRIES // INTERFACE 5.0</div>
   </div>
-  <div class="top-right">
-    <div class="live"><i class="dot"></i><span id="topStatus">INITIALIZING</span></div>
-    <span class="clock" id="clock">--:--:--</span>
-  </div>
+  <div class="top-status"><span class="dot" id="topDot"></span><span id="topStatus">INITIALIZING</span></div>
 </header>
 
-<main class="main">
-<section class="workspace">
-<section class="panel hero">
-  <div class="hero-grid"></div>
-  <div class="corner tl">CORE SYSTEM / 04</div>
-  <div class="corner tr">NEURAL INTERFACE</div>
-  <div class="corner bl" id="heroState">AWAITING CONNECTION</div>
-  <div class="core-wrap">
-    <div class="orbit"></div>
-    <div class="orbit two"></div>
-    <div class="orbit three"></div>
-    <div class="core">F</div>
-  </div>
-  <div class="hero-label">
-    <strong>F.R.I.D.A.Y.</strong>
-    <span id="heroSubtitle">PERSONAL AI · READY TO ASSIST</span>
-  </div>
-</section>
+<main class="layout">
+  <aside class="left">
+    <section class="panel">
+      <div class="panel-title">SYSTEM DIAGNOSTICS</div>
+      <div class="system-item">
+        <div><span>API CONNECTION</span><span id="apiStatus">CHECKING</span></div>
+        <div class="bar"><span id="apiBar"></span></div>
+      </div>
+      <div class="system-item">
+        <div><span>AI CORE</span><span id="aiStatus">READY</span></div>
+        <div class="bar"><span style="width:100%"></span></div>
+      </div>
+      <div class="system-item">
+        <div><span>VOICE ENGINE</span><span id="voiceStatus">STANDBY</span></div>
+        <div class="bar"><span id="voiceBar" style="width:65%"></span></div>
+      </div>
+      <div class="system-item">
+        <div><span>INTERFACE</span><span>ONLINE</span></div>
+        <div class="bar"><span style="width:100%"></span></div>
+      </div>
+    </section>
 
-<section class="panel chat-panel">
-  <div class="panel-head">
-    <div class="panel-title">NEURAL COMMUNICATION</div>
-    <div class="subtle" id="chatCount">SESSION 01</div>
-  </div>
-  <div class="chat-log" id="chatLog" aria-live="polite">
-    <div class="message ai">
-      <span class="who">F.R.I.D.A.Y. / SYSTEM</span>
-      Привет! Я F.R.I.D.A.Y. 4.0. Система готова к работе. Чем займёмся?
+    <section class="panel">
+      <div class="panel-title">QUICK COMMANDS</div>
+      <div class="action-grid">
+        <button onclick="quick('Представься')">IDENTITY</button>
+        <button onclick="quick('Проведи диагностику системы')">DIAGNOSTICS</button>
+        <button onclick="quick('Какие у тебя возможности?')">CAPABILITIES</button>
+        <button onclick="quick('Расскажи последние новости технологий')">TECH NEWS</button>
+      </div>
+    </section>
+  </aside>
+
+  <section class="center">
+    <div class="core-area">
+      <div class="core" id="core">
+        <div class="ring one"></div>
+        <div class="ring two"></div>
+        <div class="ring three"></div>
+        <div class="core-center"></div>
+      </div>
+      <div class="core-label">F.R.I.D.A.Y.</div>
+      <div class="core-sub" id="coreState">ARTIFICIAL INTELLIGENCE SYSTEM</div>
+      <div class="visualizer" id="visualizer">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
     </div>
-  </div>
-  <div class="typing" id="typing">F.R.I.D.A.Y. формирует ответ...</div>
-  <form class="composer" id="chatForm">
-    <button class="btn icon-btn" type="button" id="micBtn" title="Голосовой ввод">⌁</button>
-    <textarea id="messageInput" rows="1" placeholder="Введите сообщение... (Enter — отправить)"></textarea>
-    <button class="btn primary" id="sendBtn" type="submit">SEND ↗</button>
-  </form>
-</section>
-</section>
 
-<aside class="side">
-<section class="panel status-panel">
-  <div class="status-head">
-    <div class="panel-title">SYSTEM STATUS</div>
-    <span class="dot" style="color:var(--green)"></span>
-  </div>
-  <div class="status-list">
-    <div class="status-row"><span>Backend API</span><b class="status-value wait" id="apiStatus">CHECKING</b></div>
-    <div class="status-row"><span>AI Provider</span><b class="status-value" id="providerStatus">OpenRouter</b></div>
-    <div class="status-row"><span>AI Model</span><b class="status-value" id="modelStatus">AUTO</b></div>
-    <div class="status-row"><span>Voice engine</span><b class="status-value wait" id="voiceStatus">CHECKING</b></div>
-    <div class="status-row"><span>Interface</span><b class="status-value">v4.0</b></div>
-  </div>
-  <div class="meter"><i></i></div>
-</section>
+    <section class="panel chat-panel">
+      <div class="panel-title">NEURAL COMMUNICATION CHANNEL</div>
+      <div class="messages" id="messages">
+        <div class="message ai">
+          <div class="message-label">F.R.I.D.A.Y. // SYSTEM</div>
+          Добро пожаловать. F.R.I.D.A.Y. 5.0 готова к работе. Чем могу помочь?
+        </div>
+      </div>
+      <div class="input-row">
+        <input id="userInput" placeholder="Введите команду..." autocomplete="off">
+        <button class="voice-button" id="micButton" onclick="startListening()">🎙</button>
+        <button id="sendButton" onclick="sendMessage()">SEND</button>
+      </div>
+    </section>
+  </section>
 
-<section class="panel quick-panel">
-  <div class="panel-title">QUICK COMMANDS</div>
-  <div class="quick-grid">
-    <button class="quick" type="button" data-prompt="Расскажи, что ты умеешь."><b>✧</b>ВОЗМОЖНОСТИ</button>
-    <button class="quick" type="button" data-prompt="Помоги составить план на сегодня."><b>◷</b>ПЛАНИРОВАНИЕ</button>
-    <button class="quick" type="button" data-prompt="Объясни сложную тему простыми словами."><b>⌘</b>ОБУЧЕНИЕ</button>
-    <button class="quick" type="button" data-prompt="Предложи идеи для моего проекта."><b>◇</b>ИДЕИ</button>
-  </div>
-</section>
+  <aside class="right">
+    <section class="panel">
+      <div class="panel-title">STARK NETWORK</div>
+      <div class="small-data">
+        <div>SERVER STATUS</div>
+        <div class="info-value" id="serverStatus">CONNECTING...</div>
+        <br>
+        <div>AI PROVIDER</div>
+        <div class="info-value">OPENROUTER</div>
+        <br>
+        <div>VOICE OUTPUT</div>
+        <div class="info-value">EDGE TTS / BROWSER</div>
+        <br>
+        <div>API VERSION</div>
+        <div class="info-value">2.0</div>
+      </div>
+    </section>
 
-<div class="system-note">
-  <div style="color:#8fb8d4;letter-spacing:.15em;margin-bottom:5px">SECURE CONNECTION</div>
-  Сообщения отправляются на подключённый F.R.I.D.A.Y. API. Не вводите пароли и другие секретные данные.
-</div>
-</aside>
+    <section class="panel">
+      <div class="panel-title">LOCAL SYSTEM</div>
+      <div class="small-data">
+        <div>LOCAL TIME</div>
+        <div class="clock" id="clock">--:--:--</div>
+        <br>
+        <div>INTERFACE VERSION</div>
+        <div class="info-value">F.R.I.D.A.Y. 5.0</div>
+        <br>
+        <div>OPERATING MODE</div>
+        <div class="info-value" id="mode">STANDBY</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">CONTROL</div>
+      <div class="action-grid">
+        <button onclick="stopSpeaking()">STOP VOICE</button>
+        <button onclick="clearChat()">CLEAR CHAT</button>
+      </div>
+    </section>
+  </aside>
 </main>
 
-<footer class="footer">
-  <span>F.R.I.D.A.Y. 4.0 · STARK-INSPIRED INTERFACE</span>
-  <span id="footerStatus">API LINK: VERIFYING</span>
-</footer>
-</div>
+<div class="footer">STARK INDUSTRIES // F.R.I.D.A.Y. AI SYSTEM // 5.0</div>
 
 <script>
 const API_BASE = "https://friday-ai-backend-gfc4.onrender.com";
-const HEALTH_TIMEOUT_MS = 20000;
-const CHAT_TIMEOUT_MS = 90000;
 
-const $ = id => document.getElementById(id);
-const chatLog = $("chatLog");
-const input = $("messageInput");
+const messages = document.getElementById("messages");
+const input = document.getElementById("userInput");
+const sendButton = document.getElementById("sendButton");
+const visualizer = document.getElementById("visualizer");
 
-let busy = false;
-let sessionMessages = 0;
 let currentAudio = null;
 let currentAudioUrl = null;
+let recognition = null;
+let busy = false;
 
-function setStatus(text, kind = "ok") {
-  $("apiStatus").textContent = text;
-  $("apiStatus").className = "status-value " +
-    (kind === "error" ? "error" : kind === "wait" ? "wait" : "");
+function addMessage(text, type){
+  const div = document.createElement("div");
+  div.className = "message " + type;
 
-  $("topStatus").textContent =
-    kind === "error" ? "OFFLINE" :
-    kind === "wait" ? "CONNECTING" : "ONLINE";
+  const label = document.createElement("div");
+  label.className = "message-label";
+  label.textContent = type === "user" ? "YOU // COMMAND" : "F.R.I.D.A.Y. // RESPONSE";
 
-  $("heroState").textContent =
-    kind === "error" ? "CONNECTION INTERRUPTED" :
-    kind === "wait" ? "ESTABLISHING LINK" : "SECURE LINK ESTABLISHED";
-
-  $("heroSubtitle").textContent =
-    kind === "error" ? "API CONNECTION REQUIRED" :
-    kind === "wait" ? "CONNECTING TO NEURAL CORE" :
-    "PERSONAL AI · READY TO ASSIST";
-
-  $("footerStatus").textContent = "API LINK: " + text;
-}
-
-async function fetchWithTimeout(url, options = {}, timeout = 15000) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeout);
-  try {
-    return await fetch(url, {
-      ...options,
-      signal: controller.signal,
-      cache: "no-store"
-    });
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
-async function checkServer() {
-  setStatus("CHECKING", "wait");
-  try {
-    const response = await fetchWithTimeout(
-      API_BASE + "/health", {}, HEALTH_TIMEOUT_MS
-    );
-    const raw = await response.text();
-    let data;
-    try {
-      data = JSON.parse(raw);
-    } catch {
-      throw new Error("Сервер вернул не JSON. HTTP " + response.status);
-    }
-    if (!response.ok || data.ok !== true) {
-      throw new Error("Health check не пройден. HTTP " + response.status);
-    }
-    setStatus("CONNECTED", "ok");
-    if (data.provider) $("providerStatus").textContent = data.provider;
-    if (data.model) $("modelStatus").textContent = data.model;
-    $("voiceStatus").textContent = "TTS ENDPOINT READY";
-    $("voiceStatus").className = "status-value";
-  } catch (error) {
-    setStatus(error.name === "AbortError" ? "TIMEOUT" : "UNAVAILABLE", "error");
-    $("voiceStatus").textContent = "CHECK FAILED";
-    $("voiceStatus").className = "status-value wait";
-    console.warn("F.R.I.D.A.Y. health check:", error);
-  }
-}
-
-function addMessage(text, who) {
-  const bubble = document.createElement("div");
-  bubble.className = "message " + (who === "user" ? "user" : "ai");
-
-  const label = document.createElement("span");
-  label.className = "who";
-  label.textContent = who === "user"
-    ? "YOU / COMMAND"
-    : "F.R.I.D.A.Y. / RESPONSE";
-
-  const content = document.createElement("span");
+  const content = document.createElement("div");
   content.textContent = text;
 
-  bubble.append(label, content);
-  chatLog.appendChild(bubble);
-  chatLog.scrollTop = chatLog.scrollHeight;
-
-  sessionMessages++;
-  $("chatCount").textContent =
-    "SESSION · " + String(sessionMessages).padStart(2, "0");
+  div.appendChild(label);
+  div.appendChild(content);
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
 }
 
-async function sendMessage(text) {
-  const message = text.trim();
-  if (!message || busy) return;
+function setActivity(active, state){
+  visualizer.classList.toggle("active", active);
+  document.getElementById("coreState").textContent = state;
+  document.getElementById("mode").textContent = active ? "ACTIVE" : "STANDBY";
+}
 
-  busy = true;
-  $("sendBtn").disabled = true;
-  $("sendBtn").textContent = "…";
-  addMessage(message, "user");
-  input.value = "";
-  $("typing").style.display = "block";
-
-  try {
-    const response = await fetchWithTimeout(
-      API_BASE + "/chat",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify({ message })
-      },
-      CHAT_TIMEOUT_MS
-    );
-
-    const raw = await response.text();
-    let data;
-    try {
-      data = JSON.parse(raw);
-    } catch {
-      throw new Error("Некорректный ответ API (HTTP " + response.status + ").");
-    }
-
-    if (!response.ok) {
-      const detail =
-        data.detail || data.error || data.message || ("HTTP " + response.status);
-      throw new Error(
-        typeof detail === "string" ? detail : JSON.stringify(detail)
-      );
-    }
-
-    if (typeof data.reply !== "string" || !data.reply.trim()) {
-      throw new Error("API не вернул текстовый ответ.");
-    }
-
-    addMessage(data.reply.trim(), "ai");
-    if (data.provider) $("providerStatus").textContent = data.provider;
-    if (data.model) $("modelStatus").textContent = data.model;
-
-    setStatus("CONNECTED", "ok");
-    speak(data.reply.trim());
-
-  } catch (error) {
-    const messageText =
-      error.name === "AbortError"
-        ? "Сервер не ответил вовремя. Попробуйте ещё раз."
-        : error instanceof TypeError
-          ? "Не удалось связаться с API. Проверьте интернет, адрес backend и настройки CORS."
-          : error.message;
-
-    addMessage("Ошибка: " + messageText, "ai");
-    console.error("F.R.I.D.A.Y. chat:", error);
-
-  } finally {
-    $("typing").style.display = "none";
-    busy = false;
-    $("sendBtn").disabled = false;
-    $("sendBtn").textContent = "SEND ↗";
-    input.focus();
+function cleanupAudio(){
+  if(currentAudio){
+    currentAudio.pause();
+    currentAudio = null;
+  }
+  if(currentAudioUrl){
+    URL.revokeObjectURL(currentAudioUrl);
+    currentAudioUrl = null;
   }
 }
 
-// Облачная озвучка /tts с резервным голосом браузера.
-async function speak(text) {
-  if (!text) return;
+function stopSpeaking(){
+  cleanupAudio();
+  if("speechSynthesis" in window) speechSynthesis.cancel();
+  setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
+  document.getElementById("voiceStatus").textContent = "STANDBY";
+}
 
-  stopSpeaking();
+function browserVoice(text){
+  if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "ru-RU";
+  utterance.rate = 0.92;
+  utterance.pitch = 0.85;
+  utterance.onstart = () => {
+    setActivity(true, "BROWSER VOICE ACTIVE");
+    document.getElementById("voiceStatus").textContent = "ACTIVE";
+  };
+  utterance.onend = () => {
+    setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
+    document.getElementById("voiceStatus").textContent = "STANDBY";
+  };
+  speechSynthesis.speak(utterance);
+}
 
-  $("voiceStatus").textContent = "CLOUD VOICE";
-  $("voiceStatus").className = "status-value wait";
+async function speak(text){
+  cleanupAudio();
+  document.getElementById("voiceStatus").textContent = "CONNECTING";
+  setActivity(true, "VOICE ENGINE INITIALIZING");
 
-  try {
-    const response = await fetchWithTimeout(
-      API_BASE + "/tts",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "audio/mpeg"
-        },
-        body: JSON.stringify({ message: text })
-      },
-      60000
-    );
+  try{
+    const response = await fetch(API_BASE + "/tts", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:text})
+    });
 
-    if (!response.ok) {
-      throw new Error("TTS HTTP " + response.status);
-    }
+    if(!response.ok) throw new Error("TTS unavailable");
 
-    const audioBlob = await response.blob();
-    if (!audioBlob.size) {
-      throw new Error("Пустой аудиофайл");
-    }
+    const blob = await response.blob();
+    if(!blob.size) throw new Error("Empty audio");
 
-    currentAudioUrl = URL.createObjectURL(audioBlob);
+    currentAudioUrl = URL.createObjectURL(blob);
     currentAudio = new Audio(currentAudioUrl);
 
     currentAudio.onended = () => {
       cleanupAudio();
-      $("voiceStatus").textContent = "CLOUD READY";
-      $("voiceStatus").className = "status-value";
+      setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
+      document.getElementById("voiceStatus").textContent = "STANDBY";
     };
 
     currentAudio.onerror = () => {
@@ -591,53 +416,142 @@ async function speak(text) {
     };
 
     await currentAudio.play();
-
-  } catch (error) {
+    document.getElementById("voiceStatus").textContent = "ACTIVE";
+    setActivity(true, "F.R.I.D.A.Y. SPEAKING");
+  }catch(error){
     console.warn("Cloud voice unavailable:", error);
-    cleanupAudio();
     browserVoice(text);
   }
 }
 
-function cleanupAudio() {
-  if (currentAudio) {
-    currentAudio.onended = null;
-    currentAudio.onerror = null;
-    currentAudio.pause();
-    currentAudio = null;
-  }
+async function sendMessage(){
+  const text = input.value.trim();
+  if(!text || busy) return;
 
-  if (currentAudioUrl) {
-    URL.revokeObjectURL(currentAudioUrl);
-    currentAudioUrl = null;
+  stopSpeaking();
+  addMessage(text, "user");
+  input.value = "";
+  busy = true;
+  sendButton.disabled = true;
+  sendButton.textContent = "...";
+  document.getElementById("aiStatus").textContent = "PROCESSING";
+  setActivity(true, "PROCESSING REQUEST");
+
+  try{
+    const response = await fetch(API_BASE + "/chat", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:text})
+    });
+
+    if(!response.ok) throw new Error("Server error: " + response.status);
+
+    const data = await response.json();
+    if(!data.reply) throw new Error("Empty AI response");
+
+    addMessage(data.reply, "ai");
+    await speak(data.reply.trim());
+  }catch(error){
+    addMessage("Не удалось получить ответ. Проверь подключение к серверу. (" + error.message + ")", "ai");
+    setActivity(false, "CONNECTION ERROR");
+  }finally{
+    busy = false;
+    sendButton.disabled = false;
+    sendButton.textContent = "SEND";
+    document.getElementById("aiStatus").textContent = "READY";
   }
 }
 
-function stopSpeaking() {
-  cleanupAudio();
-  if ("speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-  }
+function quick(text){
+  input.value = text;
+  sendMessage();
 }
 
-function browserVoice(text) {
-  if (!("speechSynthesis" in window)) {
-    $("voiceStatus").textContent = "UNAVAILABLE";
-    $("voiceStatus").className = "status-value error";
+function clearChat(){
+  messages.innerHTML = "";
+  addMessage("Канал очищен. Готова к новым командам.", "ai");
+  stopSpeaking();
+}
+
+input.addEventListener("keydown", event => {
+  if(event.key === "Enter") sendMessage();
+});
+
+function startListening(){
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if(!SpeechRecognition){
+    addMessage("Голосовой ввод не поддерживается этим браузером. Попробуй Chrome.", "ai");
     return;
   }
 
-  window.speechSynthesis.cancel();
+  if(recognition){
+    recognition.stop();
+    recognition = null;
+  }
 
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "ru-RU";
-  utterance.rate = 0.92;
-  utterance.pitch = 0.85;
+  recognition = new SpeechRecognition();
+  recognition.lang = "ru-RU";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
 
-  utterance.onstart = () => {
-    $("voiceStatus").textContent = "BROWSER FALLBACK";
-    $("voiceStatus").className = "status-value wait";
+  recognition.onstart = () => {
+    setActivity(true, "LISTENING...");
+    document.getElementById("micButton").textContent = "●";
   };
 
-  utterance.onend = () => {
-    $("voiceStatus").textContent = "BROWSER READY";
+  recognition.onresult = event => {
+    input.value = event.results[0][0].transcript;
+    sendMessage();
+  };
+
+  recognition.onerror = event => {
+    addMessage("Ошибка голосового ввода: " + event.error, "ai");
+    setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
+  };
+
+  recognition.onend = () => {
+    document.getElementById("micButton").textContent = "🎙";
+    if(!busy && !currentAudio) setActivity(false, "ARTIFICIAL INTELLIGENCE SYSTEM");
+  };
+
+  recognition.start();
+}
+
+async function checkServer(){
+  try{
+    const response = await fetch(API_BASE + "/health");
+    if(!response.ok) throw new Error("Offline");
+
+    const data = await response.json();
+
+    document.getElementById("apiStatus").textContent = "ONLINE";
+    document.getElementById("serverStatus").textContent = "CONNECTED";
+    document.getElementById("topStatus").textContent = "SYSTEM ONLINE";
+    document.getElementById("topDot").style.background = "#32f4a1";
+    document.getElementById("apiBar").style.width = "100%";
+
+    if(data.model){
+      document.getElementById("serverStatus").textContent = "CONNECTED // " + data.provider;
+    }
+  }catch(error){
+    document.getElementById("apiStatus").textContent = "OFFLINE";
+    document.getElementById("serverStatus").textContent = "UNAVAILABLE";
+    document.getElementById("topStatus").textContent = "SERVER OFFLINE";
+    document.getElementById("topDot").style.background = "#ff5757";
+    document.getElementById("apiBar").style.width = "10%";
+  }
+}
+
+function updateClock(){
+  document.getElementById("clock").textContent =
+    new Date().toLocaleTimeString("ru-RU");
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+checkServer();
+setInterval(checkServer, 60000);
+</script>
+</body>
+</html>
